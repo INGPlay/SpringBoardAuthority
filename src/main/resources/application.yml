@@ -1,0 +1,18 @@
+spring:
+    datasource:
+        url: jdbc:h2:tcp://localhost/~/springboardauthority
+        username: sa
+        password: sa
+        driver-class-name: org.h2.Driver
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+#            show_sql: true
+            format_sql: true
+            default_batch_fetch_size: 1000    # 100??? ?? 1000? ??
+        database-platform: org.hibernate.dialect.H2Dialect
+logging.level:
+    crud.hibernate.SQL: debug
+#    org.hibernate.type: trace
