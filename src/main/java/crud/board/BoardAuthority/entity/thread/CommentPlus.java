@@ -2,12 +2,14 @@ package crud.board.BoardAuthority.entity.thread;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class CommentPlus {
 
     @Setter(value = AccessLevel.NONE)
@@ -32,4 +34,9 @@ public class CommentPlus {
     @OneToOne
     @JoinColumn(name = "comment_id")
     private Comment comment;
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
+        comment.setCommentPlus(this);
+    }
 }

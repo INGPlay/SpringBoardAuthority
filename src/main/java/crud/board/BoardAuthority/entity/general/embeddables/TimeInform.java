@@ -1,4 +1,4 @@
-package crud.board.BoardAuthority.entity.embeddables;
+package crud.board.BoardAuthority.entity.general.embeddables;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

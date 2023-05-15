@@ -1,15 +1,14 @@
 package crud.board.BoardAuthority.entity.account;
 
+import crud.board.BoardAuthority.entity.account.embeddables.AccountInform;
 import crud.board.BoardAuthority.entity.authentication.Role;
-import crud.board.BoardAuthority.entity.embeddables.TimeInform;
+import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -27,15 +26,23 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    // Role
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     // 계정 생성 및 수정시간
     @Embedded
     private TimeInform timeInform;
 
-    // Role
-    @OneToMany(mappedBy = "account")
-    private List<Role> roles = new ArrayList<>();
+    @Embedded
+    private AccountInform accountInform;
 
-    // AccountActivity
-    @OneToOne(mappedBy = "account")
-    private AccountActivity accountActivity;
+    public void setRole(Role role) {
+        if (this.role != null){
+            this.role.getAccounts().remove(this);
+        }
+        this.role = role;
+        role.getAccounts().add(this);
+    }
 }

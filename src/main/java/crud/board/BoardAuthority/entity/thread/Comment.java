@@ -1,15 +1,17 @@
 package crud.board.BoardAuthority.entity.thread;
 
-import crud.board.BoardAuthority.entity.embeddables.TimeInform;
-import crud.board.BoardAuthority.entity.account.AccountActivity;
+import crud.board.BoardAuthority.entity.account.Account;
+import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Comment {
 
     @Setter(value = AccessLevel.NONE)
@@ -34,5 +36,26 @@ public class Comment {
     // Account
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private AccountActivity accountActivity;
+    private Account account;
+
+    public void setCommentPlus(CommentPlus commentPlus) {
+        this.commentPlus = commentPlus;
+        commentPlus.setComment(this);
+    }
+
+    public void setPost(Post post) {
+        if (this.post != null){
+            post.getComments().remove(this);
+        }
+        this.post = post;
+        post.getComments().add(this);
+    }
+
+    public void setAccount(Account account) {
+        if (this.account != null){
+            account.getAccountInform().getComments().remove(this);
+        }
+        this.account = account;
+        account.getAccountInform().getComments().add(this);
+    }
 }

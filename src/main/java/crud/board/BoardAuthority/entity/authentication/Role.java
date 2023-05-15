@@ -1,10 +1,10 @@
 package crud.board.BoardAuthority.entity.authentication;
 
-import crud.board.BoardAuthority.entity.authentication.enums.AccountRole;
 import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.thread.Thread;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +15,7 @@ import java.util.Set;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Role {
 
     @Setter(value = AccessLevel.NONE)
@@ -22,19 +23,25 @@ public class Role {
     @Column(name = "role_id")
     private Long id;
 
-    @Enumerated(value = EnumType.STRING)
-    private AccountRole accountRole;
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
+    @Column(unique = true, nullable = false)
+    private String roleName;
 
     // Account
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "role")
+    private List<Account> accounts = new ArrayList<>();
 
     // Thread
+    @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "role")
     private List<Thread> thread = new ArrayList<>();
 
     // Path
+    @Setter(AccessLevel.NONE)
     @ManyToMany
     @JoinTable(
             name = "Role_Path",
@@ -42,4 +49,19 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "path_id")
     )
     private Set<Path> paths = new HashSet<>();
+
+    public void addAccounts(Account account){
+        account.setRole(this);
+        this.accounts.add(account);
+    }
+
+    public void addThreads(Thread thread){
+        thread.setRole(this);
+        this.thread.add(thread);
+    }
+
+    public void addPath(Path path){
+        this.paths.add(path);
+        path.getRoles().add(this);
+    }
 }

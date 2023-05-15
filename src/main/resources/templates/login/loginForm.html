@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="row justify-content-center">
+        Login Page
+    </h1>
+
+    <h4 class="row justify-content-center text-success"
+        th:if="${!#strings.isEmpty(param.registerMessage)}" th:text="${param.registerMessage}">
+    </h4>
+    <div class="row justify-content-center text-danger"
+        th:if="${param.error}" >
+        가입되지 않은 계정이거나 비밀번호가 틀렸습니다.
+    </div>
+    <div class="row justify-content-center text-warning"
+         th:if="${param.logout}" >
+        로그아웃 되었습니다.
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-4">
+
+            <form th:action="@{/login-process}" method="post">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username"
+                    name = "username">
+                    <div class="form-text">아이디를 입력하세요</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password"
+                    name = "password">
+                    <div class="form-text">비밀번호를 입력하세요</div>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+                    <button type="button" class="btn btn btn-success"
+                    th:onclick="|location.href='@{/login/register}'|">Register Page</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>
