@@ -12,6 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class RoleService {
+
     private final RoleRepository roleRepository;
 
     public void createRole(String roleName){

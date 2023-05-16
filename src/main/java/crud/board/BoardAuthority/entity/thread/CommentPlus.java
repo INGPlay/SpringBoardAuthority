@@ -31,7 +31,7 @@ public class CommentPlus {
 
     // Comment
     @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
 

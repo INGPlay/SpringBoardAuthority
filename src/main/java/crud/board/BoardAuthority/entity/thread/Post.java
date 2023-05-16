@@ -1,6 +1,7 @@
 package crud.board.BoardAuthority.entity.thread;
 
 import crud.board.BoardAuthority.entity.account.Account;
+import crud.board.BoardAuthority.entity.authentication.Path;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,6 +22,9 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
+    @Column(name = "thread_post_id", nullable = false)
+    private Long threadPostId;
+
     @Column
     private String title;
 
@@ -31,14 +35,19 @@ public class Post {
     private TimeInform timeInform;
 
     // Account
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 
     // Thread
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "thread_id")
     private Thread thread;
+
+    // Path
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "path_id")
+    private Path path;
 
     // Comment
     @Setter(AccessLevel.NONE)

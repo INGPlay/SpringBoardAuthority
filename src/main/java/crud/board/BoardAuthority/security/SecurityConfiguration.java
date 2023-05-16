@@ -46,8 +46,9 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(a -> a
 //                        .antMatchers("/login").permitAll()
-//                        .antMatchers("/user").hasRole("USER")
-//                        .antMatchers("/admin/pay").hasRole("ADMIN")
+                        .antMatchers("/test/user").hasRole("USER")
+                        .antMatchers("/test/manager").hasRole("MANAGER")
+                        .antMatchers("/test/admin").hasRole("ADMIN")
 //                        .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
                                 .anyRequest().permitAll()
                 )

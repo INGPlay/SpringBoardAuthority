@@ -35,11 +35,6 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private List<Account> accounts = new ArrayList<>();
 
-    // Thread
-    @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "role")
-    private List<Thread> thread = new ArrayList<>();
-
     // Path
     @Setter(AccessLevel.NONE)
     @ManyToMany
@@ -53,11 +48,6 @@ public class Role {
     public void addAccounts(Account account){
         account.setRole(this);
         this.accounts.add(account);
-    }
-
-    public void addThreads(Thread thread){
-        thread.setRole(this);
-        this.thread.add(thread);
     }
 
     public void addPath(Path path){

@@ -25,16 +25,16 @@ public class Comment {
     @Column
     private TimeInform timeInform;
 
-    @OneToOne(mappedBy = "comment")
+    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY)
     private CommentPlus commentPlus;
 
     // Post
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
     // Account
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
 

@@ -50,7 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         } else if (tokens[1].equals("ADMIN")) {
             roles.add(ROLE_USER);
-            roles.add(ROLE_ADMIN);
+            roles.add(ROLE_MANAGER);
         } else {
             log.info("--------------잘못된 권한-------------");
         }
