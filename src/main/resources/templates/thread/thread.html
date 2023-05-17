@@ -20,42 +20,39 @@
     </div>
 
 
-    <div th:if = ${postResponses}>
+    <div th:if = ${pagingPost}>
 
         <div class="list-group">
-
-            <div th:each = "post : ${postResponses}">
-
-                <a href="#" th:href = "@{${post.route}}" class="list-group-item list-group-item-action" aria-current="true">
+            <div th:each = "post : ${pagingPost}">
+                <a href="#" th:href = "@{${post.path.route}}" class="list-group-item list-group-item-action" aria-current="true">
 
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1" th:text="${post.title}">List group item heading</h5>
                         <small>3 days ago</small>
                     </div>
 
-                    <p class="mb-1" th:text = "${post.content}">Some placeholder content in a paragraph.</p>
-                    <small th:text = "${post.username}">And some small print.</small>
+                    <small th:text = "${post.account.username}">And some small print.</small>
                 </a>
-
             </div>
-
-
         </div>
 
         <div class="d-flex justify-content-center">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item" th:if="${pagingInform.hasBefore}">
-                        <a class="page-link" href="#" aria-label="Previous">
+                    <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
+                        <a class="page-link" href="#" aria-label="Previous" th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}|}">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
 
-                    <li class="page-item" th:if="${pagingInform.hasNext}">
-                        <a class="page-link" href="#" aria-label="Next">
+                    <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
+
+                        <a class="page-link" href="#"
+                           th:href="@{|?postPage=${page}|}" th:text="${page}">1</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
+                        <a class="page-link" href="#" aria-label="Next" th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}|}">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

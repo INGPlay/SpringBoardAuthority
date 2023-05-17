@@ -5,6 +5,7 @@ import crud.board.BoardAuthority.domain.response.PagingPostResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PostResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingInform;
 import crud.board.BoardAuthority.entity.account.Account;
+import crud.board.BoardAuthority.entity.authentication.Path;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.entity.thread.Thread;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -33,34 +37,10 @@ public class PostService {
     private final ThreadRepository threadRepository;
     private final PathService pathService;
 
-    public PagingPostResponse pagePost(Long threadId, int page, int size) {
+    public Page<Post> pagePost(Long threadId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timeInform.createdTime"));
 
-        Page<Post> pagePost = postRepository.findPostByThreadId(threadId, pageable);
-
-        Optional<Thread> optionalThread = threadRepository.findById(threadId);
-        if (optionalThread.isEmpty()){
-            log.info("스레드 비었다");
-        }
-
-        int startNum = pagePost.getPageable().getPageNumber() + 1;
-        int endNum = pagePost.getPageable().getPageNumber() + pagePost.getNumberOfElements();
-
-        PagingInform pagingInform = new PagingInform(
-                startNum, endNum, pagePost.hasPrevious(), pagePost.hasNext()
-        );
-        
-
-        List<PostResponse> postResponseList = pagePost.map(p -> new PostResponse(
-                        p.getAccount().getUsername(),
-                        p.getTitle(), p.getContent(),
-                        p.getTimeInform().getCreatedTime(),
-                        p.getTimeInform().getUpdatedTime(),
-                        p.getPath().getRoute()
-                )
-        ).toList();
-
-        return new PagingPostResponse(pagingInform, postResponseList);
+        return postRepository.findPostByThreadId(threadId, pageable);
     }
 
     public void createPost(PostDto postDto){

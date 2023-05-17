@@ -56,7 +56,7 @@ public class Init implements InitializingBean{
 
     public void initPost() {
         Thread thread = threadService.findThread("1번째 스레드");
-        for (int i = 1; i <= 17; i++){
+        for (int i = 1; i <= 225; i++){
             PostDto postDto = new PostDto();
             postDto.setUsername("user");
             postDto.setTitle(i + "번째 글입니다");

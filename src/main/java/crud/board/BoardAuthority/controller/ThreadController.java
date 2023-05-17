@@ -2,7 +2,9 @@ package crud.board.BoardAuthority.controller;
 
 import crud.board.BoardAuthority.domain.response.PagingPostResponse;
 import crud.board.BoardAuthority.domain.response.ThreadResponse;
-import crud.board.BoardAuthority.entity.thread.Thread;
+import crud.board.BoardAuthority.domain.response.pagingPost.PagingInform;
+import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
+import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.service.PostService;
 import crud.board.BoardAuthority.service.ThreadService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,30 +32,52 @@ public class ThreadController {
     @GetMapping
     public String thread(Model model){
 
-        addThreadResponse(model);
+        model.addAttribute(model.addAttribute("threadResponses", getThreadResponse(model)));
 
         return "thread/thread";
     }
 
     @GetMapping("/{threadId}")
     public String threadSelect(@PathVariable Long threadId,
-                               @RequestParam(defaultValue = "0") int postPage,
+                               @RequestParam(defaultValue = "1") int postPage,
                                @RequestParam(defaultValue = "10") int postSize,
-                               Model model){
+                               Model model,
+                               RedirectAttributes redirectAttributes){
 
-        addThreadResponse(model);
+        // 페이지가 1보다 작은 경우
+        if (postPage < 1){
+            redirectAttributes.addAttribute("postPage", 1);
+            redirectAttributes.addAttribute("postSize", postSize);
+            return "redirect:/thread/" + threadId;
+        }
 
-        PagingPostResponse pagingPostResponse = postService.pagePost(threadId, postPage, postSize);
+        Page<Post> pagingPost = postService.pagePost(threadId, postPage - 1, postSize);
 
-        model.addAttribute("postResponses", pagingPostResponse.getPostResponses());
-        model.addAttribute("pagingInform", pagingPostResponse.getPagingInform());
+        // 페이지가 최대 범위를 넘어선 경우
+        if (postPage > pagingPost.getTotalPages()){
+            redirectAttributes.addAttribute("postPage", pagingPost.getTotalPages());
+            redirectAttributes.addAttribute("postSize", postSize);
+            return "redirect:/thread/" + threadId;
+        }
+
+        model.addAttribute(model.addAttribute("threadResponses", getThreadResponse(model)));
+        model.addAttribute("pagingPost", pagingPost);
+
+        PagingRange<Post> pagingRange = new PagingRange<>(pagingPost, 10);
+
+        model.addAttribute("pagingRange", pagingRange);
 
         return "thread/thread";
     }
 
-    private void addThreadResponse(Model model){
-        List<ThreadResponse> threadResponses = threadService.pageThreadResponseByCreatedTime(0, 5).toList();
+    private List<ThreadResponse> getThreadResponse(Model model){
+        return threadService.pageThreadResponseByCreatedTime(0, 5).toList();
+    }
 
-        model.addAttribute(model.addAttribute("threadResponses", threadResponses));
+    @GetMapping("/{threadId}/{postId}")
+    public String viewPost(@PathVariable Long threadId,
+                           @PathVariable Long postId){
+
+        return "thread/post";
     }
 }
