@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../../static/css/bootstrap.min.css" rel="stylesheet">
+    <title>Register</title>
+</head>
+<body>
+<th:block th:replace="layout/header :: headerFragment"></th:block>
+
+<div class="container">
+    <h1 class="row justify-content-center">
+        Register
+    </h1>
+
+    <div class="row justify-content-center">
+
+        <div class="col-4">
+
+            <form th:action method="post" th:object="${registerForm}">
+
+                <div th:if="${#fields.hasGlobalErrors()}">
+                    <p class="text-danger" th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name = "username" aria-describedby="username"
+                           th:field="*{username}" th:errorclass="border-danger">
+
+                    <div class="form-text" th:errors="*{username}" >아이디를 입력하세요</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name = "password"
+                           th:field="*{password}" th:errorclass="border-danger">
+
+                    <div class="form-text" th:errors="*{password}">비밀번호를 입력하세요</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="passwordCheck" class="form-label">Password Check</label>
+                    <input type="password" class="form-control" id="passwordCheck" name = "passwordCheck"
+                           th:field="*{passwordCheck}" th:errorclass="border-danger">
+
+                    <div class="form-text" th:errors="*{passwordCheck}">비밀번호 확인</div>
+                </div>
+
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

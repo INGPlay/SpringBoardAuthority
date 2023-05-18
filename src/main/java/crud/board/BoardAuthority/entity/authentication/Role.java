@@ -1,7 +1,6 @@
 package crud.board.BoardAuthority.entity.authentication;
 
 import crud.board.BoardAuthority.entity.account.Account;
-import crud.board.BoardAuthority.entity.thread.Thread;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

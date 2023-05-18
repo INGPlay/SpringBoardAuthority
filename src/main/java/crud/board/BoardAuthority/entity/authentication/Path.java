@@ -1,8 +1,6 @@
 package crud.board.BoardAuthority.entity.authentication;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import crud.board.BoardAuthority.entity.thread.Post;
-import crud.board.BoardAuthority.entity.thread.Thread;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,14 +27,6 @@ public class Path {
     @Setter(AccessLevel.NONE)
     @ManyToMany(mappedBy = "paths")
     private Set<Role> roles = new HashSet<>();
-
-    // Thread
-    @OneToOne(mappedBy = "path", fetch = FetchType.LAZY)
-    private Thread thread;
-
-    // Post
-    @OneToOne(mappedBy = "path", fetch = FetchType.LAZY)
-    private Post post;
 
     public void addRole(Role role){
         this.roles.add(role);

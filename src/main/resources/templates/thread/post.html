@@ -6,12 +6,36 @@
           href="../../static/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<th:block th:replace="layout/header :: headerFragment"></th:block>
 
 <div class="container">
 
-    <h4>Title</h4>
-    <p>Content</p>
+    <div>
+        <h1 class="display-5" th:text="${post.title}">Title</h1>
+        <p class="lead">
+            by <em th:text="${post.username}">author</em>
+        </p>
+        <p class="text-end">
+            생성일 : <small th:text="${#dates.format(post.timeInform.createdTime, 'yyyy/MM/dd HH:mm')}">생성일</small>
+             |
+            수정일 : <small th:text="${#dates.format(post.timeInform.updatedTime, 'yyyy/MM/dd HH:mm')}">수정일</small>
+        </p>
+    </div>
 
+    <div>
+        <p class="lead" th:text="${post.content}">
+            content
+        </p>
+    </div>
+
+    <div class="d-flex flex-row justify-content-end">
+        <button type="button" class="btn btn-outline-dark"
+        th:onclick="|location.href='@{/thread/update-post/{postId}(postId=${post.postId})}'|">수정하기
+        </button>
+
+        <button type="button" class="btn btn-outline-danger">삭제하기
+        </button>
+    </div>
 </div>
 
 

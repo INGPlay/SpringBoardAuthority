@@ -1,17 +1,13 @@
 package crud.board.BoardAuthority.service;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
-import crud.board.BoardAuthority.domain.response.PagingPostResponse;
-import crud.board.BoardAuthority.domain.response.pagingPost.PostResponse;
-import crud.board.BoardAuthority.domain.response.pagingPost.PagingInform;
+import crud.board.BoardAuthority.domain.dto.ThreadDto;
+import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.entity.account.Account;
-import crud.board.BoardAuthority.entity.authentication.Path;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import crud.board.BoardAuthority.entity.thread.Post;
-import crud.board.BoardAuthority.entity.thread.Thread;
 import crud.board.BoardAuthority.repository.AccountRepository;
 import crud.board.BoardAuthority.repository.PostRepository;
-import crud.board.BoardAuthority.repository.ThreadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,11 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,44 +26,58 @@ import java.util.stream.Stream;
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
-    private final ThreadRepository threadRepository;
-    private final PathService pathService;
-
-    public Page<Post> pagePost(Long threadId, int page, int size) {
+    public Page<Post> pagePost(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timeInform.createdTime"));
 
-        return postRepository.findPostByThreadId(threadId, pageable);
+        return postRepository.findAll(pageable);
     }
 
-    public void createPost(PostDto postDto){
-        Optional<Account> optionalAccount = accountRepository.findByUsername(postDto.getUsername());
+    public PostDto findPostById(Long postId){
+        Post post = getPost(postId);
+
+        PostDto postDto = new PostDto(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getAccount().getUsername(),
+                post.getTimeInform()
+        );
+
+        return postDto;
+    }
+
+    public void createPost(ThreadDto threadDto){
+        Optional<Account> optionalAccount = accountRepository.findByUsername(threadDto.getUsername());
         if (optionalAccount.isEmpty()){
             log.info("계정 없음 에러");
         }
 
-        Optional<Thread> optionalThread = threadRepository.findById(postDto.getThreadId());
-        if (optionalThread.isEmpty()){
-            log.info("스레드 없음 에러");
-        }
-
         Account account = optionalAccount.get();
-        Thread thread = optionalThread.get();
-        Long threadPostId = updateThreadSequence(thread);
 
         Post post = new Post();
         post.setAccount(account);
-        post.setThreadPostId(threadPostId);
-        post.setThread(thread);
-        post.setTitle(postDto.getTitle());
-        post.setContent(postDto.getContent());
+        post.setTitle(threadDto.getTitle());
+        post.setContent(threadDto.getContent());
         post.setTimeInform(new TimeInform());
-        post.setPath(pathService.makePathObject(thread.getPath().getRoute() + "/" + threadPostId));
 
         postRepository.save(post);
     }
 
-    private Long updateThreadSequence(Thread thread){
-        thread.updatePostSequence();
-        return thread.getPostSeqence();
+    public void updatePost(UpdatePostDto updatePostDto){
+        Post post = getPost(updatePostDto.getPostId());
+
+        post.setTitle(updatePostDto.getTitle());
+        post.setContent(updatePostDto.getContent());
+        post.getTimeInform().renewUpdatedTime();
+
+        postRepository.save(post);
+    }
+
+    private Post getPost(Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if (optionalPost.isEmpty()){
+            log.info("id에 해당하는 post 없음");
+        }
+        return optionalPost.get();
     }
 }

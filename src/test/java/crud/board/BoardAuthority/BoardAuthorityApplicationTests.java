@@ -19,11 +19,6 @@ class BoardAuthorityApplicationTests {
 
 	@Test
 	void contextLoads() {
-		Page<Post> postPage = postService.pagePost(1L, 0, 10);
-
-		List<String> list = postPage.map(p -> p.getPath().getRoute()).toList();
-
-		System.out.println(list);
 	}
 
 }

@@ -1,21 +1,15 @@
 package crud.board.BoardAuthority.config;
 
 import crud.board.BoardAuthority.domain.dto.AccountDto;
-import crud.board.BoardAuthority.domain.dto.PostDto;
-import crud.board.BoardAuthority.entity.thread.Thread;
+import crud.board.BoardAuthority.domain.dto.ThreadDto;
 import crud.board.BoardAuthority.service.AccountService;
 import crud.board.BoardAuthority.service.PostService;
 import crud.board.BoardAuthority.service.RoleService;
-import crud.board.BoardAuthority.service.ThreadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -24,7 +18,6 @@ public class Init implements InitializingBean{
 
     private final RoleService roleService;
     private final AccountService accountService;
-    private final ThreadService threadService;
     private final PostService postService;
 
     @Override
@@ -34,7 +27,6 @@ public class Init implements InitializingBean{
 
     public void init() {
         initUser();
-        initThread();
         initPost();
     }
 
@@ -48,34 +40,32 @@ public class Init implements InitializingBean{
         accountService.createUser(new AccountDto("admin", "1111"), "ROLE_ADMIN");
     }
 
-    public void initThread(){
-        for (int i = 1; i <= 5; i++){
-            threadService.createThread(String.valueOf(i) + "번째 스레드", "/thread/" + i);
-        }
-    }
-
     public void initPost() {
-        Thread thread = threadService.findThread("1번째 스레드");
-        for (int i = 1; i <= 225; i++){
-            PostDto postDto = new PostDto();
-            postDto.setUsername("user");
-            postDto.setTitle(i + "번째 글입니다");
-            postDto.setContent("내용" + i);
-            postDto.setThreadId(1L);
+        for (int i = 1; i <= 125; i++){
+            ThreadDto threadDto = new ThreadDto();
+            threadDto.setUsername("user");
+            threadDto.setTitle(i + "번째 글입니다");
+            threadDto.setContent("내용" + i);
 
-            postService.createPost(postDto);
+            postService.createPost(threadDto);
         }
 
+        for (int i = 1; i <= 125; i++){
+            ThreadDto threadDto = new ThreadDto();
+            threadDto.setUsername("manager");
+            threadDto.setTitle(i + "번째 글입니다");
+            threadDto.setContent("내용" + i);
 
-        Thread thread2 = threadService.findThread("2번째 스레드");
-        for (int i = 1; i <= 7; i++){
-            PostDto postDto = new PostDto();
-            postDto.setUsername("manager");
-            postDto.setTitle(i + "번째 글입니다");
-            postDto.setContent("내용" + i);
-            postDto.setThreadId(2L);
-
-            postService.createPost(postDto);
+            postService.createPost(threadDto);
         }
+        for (int i = 1; i <= 125; i++){
+            ThreadDto threadDto = new ThreadDto();
+            threadDto.setUsername("admin");
+            threadDto.setTitle(i + "번째 글입니다");
+            threadDto.setContent("내용" + i);
+
+            postService.createPost(threadDto);
+        }
+
     }
 }

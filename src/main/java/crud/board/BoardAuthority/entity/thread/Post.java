@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,13 +23,10 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(name = "thread_post_id", nullable = false)
-    private Long threadPostId;
-
-    @Column
+    @Column(length = 50)
     private String title;
 
-    @Column
+    @Column(length = 1000)
     private String content;
 
     @Column
@@ -38,16 +36,6 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
-
-    // Thread
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "thread_id")
-    private Thread thread;
-
-    // Path
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "path_id")
-    private Path path;
 
     // Comment
     @Setter(AccessLevel.NONE)
@@ -60,14 +48,6 @@ public class Post {
         }
         this.account = account;
         account.getAccountInform().getPosts().add(this);
-    }
-
-    public void setThread(Thread thread) {
-        if (this.thread != null){
-            thread.getPosts().remove(this);
-        }
-        this.thread = thread;
-        thread.getPosts().add(this);
     }
 
     public void addComment(Comment comment){

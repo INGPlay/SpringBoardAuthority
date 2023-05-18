@@ -26,10 +26,6 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
-    // Role
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
 
     // 계정 생성 및 수정시간
     @Embedded
@@ -37,6 +33,12 @@ public class Account {
 
     @Embedded
     private AccountInform accountInform;
+
+
+    // Role
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     public void setRole(Role role) {
         if (this.role != null){

@@ -62,7 +62,7 @@ public class SecurityConfiguration {
                 )
                 .logout(l -> l
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID", "remember-me")
                 )
                 .sessionManagement(m -> m

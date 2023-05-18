@@ -24,7 +24,7 @@ public class TimeInform {
         this.updatedTime = new Date();
     }
 
-    public void renewUpdatedTiem(){
+    public void renewUpdatedTime(){
         this.updatedTime = new Date();
     }
 }

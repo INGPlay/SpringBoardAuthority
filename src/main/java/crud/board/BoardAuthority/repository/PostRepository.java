@@ -9,7 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-
-    @Query("select p from Post p where p.thread.id = :threadId")
-    public Page<Post> findPostByThreadId(Long threadId, Pageable pageable);
 }

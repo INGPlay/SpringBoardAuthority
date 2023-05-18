@@ -6,60 +6,63 @@
           href="../../static/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<th:block th:replace="layout/header :: headerFragment"></th:block>
 
 <div class="container">
 
-    <div>
-        <ul class="nav nav-pills">
+    <div class="d-flex flex-row justify-content-end">
 
-            <li class="nav-item" th:each = "response : ${threadResponses}">
-                <a class="nav-link active" href="#" th:href = "@{${response.route}}" th:text = "${response.title}">Active</a>
-            </li>
+        <button type="button" class="btn btn-outline-dark"
+                th:onclick="|location.href='@{/thread/create-post}'|">작성하기
+        </button>
 
-        </ul>
     </div>
 
+    <table class="table table-hover">
 
-    <div th:if = ${pagingPost}>
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">제목</th>
+            <th scope="col">글쓴이</th>
+            <th scope="col">작성일</th>
+        </tr>
+        </thead>
 
-        <div class="list-group">
-            <div th:each = "post : ${pagingPost}">
-                <a href="#" th:href = "@{${post.path.route}}" class="list-group-item list-group-item-action" aria-current="true">
+        <tbody>
+        <tr th:each = "post : ${pagingPost}" th:onclick="|location.href='@{/thread/post/{postId}(postId=${post.id})}'|">
+            <th th:text = "${post.id}" scope="row">125</th>
+            <td th:text = "${post.title}">125번째 글입니다</td>
+            <td th:text = "${post.account.username}">admin</td>
+            <td th:text = "${#dates.format(post.timeInform.updatedTime, 'MM/dd HH:mm')}">05/18 10:39</td>
+        </tr>
+        </tbody>
 
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1" th:text="${post.title}">List group item heading</h5>
-                        <small>3 days ago</small>
-                    </div>
+    </table>
 
-                    <small th:text = "${post.account.username}">And some small print.</small>
-                </a>
-            </div>
-        </div>
 
-        <div class="d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
-                        <a class="page-link" href="#" aria-label="Previous" th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}|}">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
+                    <a class="page-link" href="#" aria-label="Previous" th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}|}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
 
-                    <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
+                <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
 
-                        <a class="page-link" href="#"
-                           th:href="@{|?postPage=${page}|}" th:text="${page}">1</a>
-                    </li>
+                    <a class="page-link" href="#"
+                       th:href="@{|?postPage=${page}|}" th:text="${page}">1</a>
+                </li>
 
-                    <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
-                        <a class="page-link" href="#" aria-label="Next" th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}|}">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
+                <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
+                    <a class="page-link" href="#" aria-label="Next" th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}|}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
 </div>

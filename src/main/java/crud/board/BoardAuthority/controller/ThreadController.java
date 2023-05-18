@@ -1,66 +1,51 @@
 package crud.board.BoardAuthority.controller;
 
-import crud.board.BoardAuthority.domain.response.PagingPostResponse;
-import crud.board.BoardAuthority.domain.response.ThreadResponse;
-import crud.board.BoardAuthority.domain.response.pagingPost.PagingInform;
+import crud.board.BoardAuthority.domain.dto.PostDto;
+import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
+import crud.board.BoardAuthority.domain.form.post.CreatePostForm;
+import crud.board.BoardAuthority.domain.form.post.UpdatePostForm;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
 import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.service.PostService;
-import crud.board.BoardAuthority.service.ThreadService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/thread")
 public class ThreadController {
-
-    private final ThreadService threadService;
     private final PostService postService;
 
+    // 게시판 페이징
     @GetMapping
-    public String thread(Model model){
+    public String viewThread(@RequestParam(defaultValue = "1") int postPage,
+                             @RequestParam(defaultValue = "10") int postSize,
+                             Model model,
+                             RedirectAttributes redirectAttributes,
+                             @AuthenticationPrincipal User user){
 
-        model.addAttribute(model.addAttribute("threadResponses", getThreadResponse(model)));
+        Page<Post> pagingPost = postService.pagePost(postPage - 1, postSize);
 
-        return "thread/thread";
-    }
-
-    @GetMapping("/{threadId}")
-    public String threadSelect(@PathVariable Long threadId,
-                               @RequestParam(defaultValue = "1") int postPage,
-                               @RequestParam(defaultValue = "10") int postSize,
-                               Model model,
-                               RedirectAttributes redirectAttributes){
-
-        // 페이지가 1보다 작은 경우
-        if (postPage < 1){
-            redirectAttributes.addAttribute("postPage", 1);
-            redirectAttributes.addAttribute("postSize", postSize);
-            return "redirect:/thread/" + threadId;
+        boolean x = checkPageRange(postPage, postSize, redirectAttributes, pagingPost);
+        if (!x) {
+            return "thread/thread";
         }
 
-        Page<Post> pagingPost = postService.pagePost(threadId, postPage - 1, postSize);
-
-        // 페이지가 최대 범위를 넘어선 경우
-        if (postPage > pagingPost.getTotalPages()){
-            redirectAttributes.addAttribute("postPage", pagingPost.getTotalPages());
-            redirectAttributes.addAttribute("postSize", postSize);
-            return "redirect:/thread/" + threadId;
+        if (user != null){
+            model.addAttribute("loginUsername", user.getUsername());
         }
 
-        model.addAttribute(model.addAttribute("threadResponses", getThreadResponse(model)));
         model.addAttribute("pagingPost", pagingPost);
 
         PagingRange<Post> pagingRange = new PagingRange<>(pagingPost, 10);
@@ -70,14 +55,81 @@ public class ThreadController {
         return "thread/thread";
     }
 
-    private List<ThreadResponse> getThreadResponse(Model model){
-        return threadService.pageThreadResponseByCreatedTime(0, 5).toList();
+    private boolean checkPageRange(int postPage, int postSize, RedirectAttributes redirectAttributes, Page<Post> pagingPost) {
+        // 페이지가 1보다 작은 경우
+        if (postPage < 1){
+            redirectAttributes.addAttribute("postPage", 1);
+            redirectAttributes.addAttribute("postSize", postSize);
+            return false;
+
+            // 페이지가 최대 범위를 넘어선 경우
+        } else if (postPage > pagingPost.getTotalPages()){
+            redirectAttributes.addAttribute("postPage", pagingPost.getTotalPages());
+            redirectAttributes.addAttribute("postSize", postSize);
+            return false;
+        }
+
+        return true;
     }
 
-    @GetMapping("/{threadId}/{postId}")
-    public String viewPost(@PathVariable Long threadId,
-                           @PathVariable Long postId){
+    // Read
+    @GetMapping("/post/{postId}")
+    public String viewPost(@PathVariable Long postId,
+                           Model model){
+
+        PostDto post = postService.findPostById(postId);
+
+        model.addAttribute("post", post);
 
         return "thread/post";
     }
+
+    // Create
+    @GetMapping("/create-post")
+    public String createPostForm(Model model){
+
+        CreatePostForm createPostForm = new CreatePostForm("", "");
+
+        model.addAttribute("createPostForm", createPostForm);
+
+        return "thread/createPostForm";
+    }
+
+    // Update
+    @GetMapping("/update-post/{postId}")
+    public String updatePostForm(@PathVariable Long postId,
+                                 Model model){
+
+        PostDto post = postService.findPostById(postId);
+
+        UpdatePostForm updatePostForm = new UpdatePostForm(post.getPostId(), post.getTitle(), post.getContent());
+
+        model.addAttribute("updatePostForm", updatePostForm);
+
+        return "thread/updatePostForm";
+    }
+
+    @PostMapping("/update-post")
+    public String updatePost(@Valid UpdatePostForm updatePostForm,
+                             BindingResult bindingResult,
+                             Model model){
+        log.info("{}", bindingResult);
+
+        // Validation
+        if (bindingResult.hasErrors()){
+            model.addAttribute("updatePostForm", updatePostForm);
+            return "thread/updatePostForm";
+        }
+
+        UpdatePostDto updatePostDto = new UpdatePostDto(
+                updatePostForm.getPostId(),
+                updatePostForm.getTitle(),
+                updatePostForm.getContent()
+        );
+        postService.updatePost(updatePostDto);
+
+        return "redirect:/thread/post/" + updatePostForm.getPostId();
+    }
+
+    // Delete
 }
