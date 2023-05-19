@@ -27,9 +27,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
     public Page<Post> pagePost(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timeInform.createdTime"));
+        try {
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "timeInform.createdTime"));
 
-        return postRepository.findAll(pageable);
+            return postRepository.findAll(pageable);
+        }catch (IllegalArgumentException e){
+            return null;
+        }
     }
 
     public PostDto findPostById(Long postId){
@@ -79,5 +83,9 @@ public class PostService {
             log.info("id에 해당하는 post 없음");
         }
         return optionalPost.get();
+    }
+
+    public void deletePost(Long postId){
+        postRepository.deleteById(postId);
     }
 }

@@ -16,10 +16,10 @@ import java.util.List;
 public class AccountInform {
 
     // Post
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
 
     // Comment
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 }

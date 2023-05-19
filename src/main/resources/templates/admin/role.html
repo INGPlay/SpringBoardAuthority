@@ -42,8 +42,30 @@
 
     </table>
 
-    <th:block th:replace="layout/pagination :: pagination"></th:block>
 
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
+                    <a class="page-link" href="#" aria-label="Previous" th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}|}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
+
+                    <a class="page-link" href="#"
+                       th:href="@{|?postPage=${page}|}" th:text="${page}">1</a>
+                </li>
+
+                <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
+                    <a class="page-link" href="#" aria-label="Next" th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}|}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 
 </div>
 

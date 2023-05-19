@@ -8,6 +8,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -42,18 +43,28 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return (web -> web.ignoring()
+                .antMatchers("/css/*", "/js/*")
+                // 경로 잘 확인할 것. 정적 파일이 다 들어가지 않으면 통과된 정적파일이 URI로 들어가서 반환됨
+        );
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(a -> a
 //                        .antMatchers("/login").permitAll()
-                        .antMatchers("/test/user").hasRole("USER")
+                        .antMatchers("/test/user", "/account").hasRole("USER")
                         .antMatchers("/test/manager").hasRole("MANAGER")
-                        .antMatchers("/test/admin").hasRole("ADMIN")
+                        .antMatchers("/test/admin", "/admin/**").hasRole("ADMIN")
 //                        .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
+                                .antMatchers("/", "/thread", "/login").permitAll()
+//                                .anyRequest().access("@authorizationDynamicHandler.isAuthorization(request, authentication)")
                                 .anyRequest().permitAll()
                 )
                 .formLogin(f -> f
-                        .loginPage("/loginPage")
+                        .loginPage("/login")
                         .defaultSuccessUrl("/thread")
                         .failureUrl("/login")
                         .usernameParameter("username")

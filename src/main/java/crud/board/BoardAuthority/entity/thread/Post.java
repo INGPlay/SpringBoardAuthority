@@ -1,13 +1,11 @@
 package crud.board.BoardAuthority.entity.thread;
 
 import crud.board.BoardAuthority.entity.account.Account;
-import crud.board.BoardAuthority.entity.authentication.Path;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package crud.board.BoardAuthority.security.authenticationManager;
 
 import crud.board.BoardAuthority.domain.dto.AccountDto;
-import crud.board.BoardAuthority.entity.account.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

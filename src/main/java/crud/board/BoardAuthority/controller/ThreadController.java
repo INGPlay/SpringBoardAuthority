@@ -1,17 +1,18 @@
 package crud.board.BoardAuthority.controller;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
+import crud.board.BoardAuthority.domain.dto.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.domain.form.post.CreatePostForm;
 import crud.board.BoardAuthority.domain.form.post.UpdatePostForm;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
 import crud.board.BoardAuthority.entity.thread.Post;
+import crud.board.BoardAuthority.security.authenticationManager.AccountContext;
 import crud.board.BoardAuthority.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,18 +33,16 @@ public class ThreadController {
     public String viewThread(@RequestParam(defaultValue = "1") int postPage,
                              @RequestParam(defaultValue = "10") int postSize,
                              Model model,
-                             RedirectAttributes redirectAttributes,
-                             @AuthenticationPrincipal User user){
+                             RedirectAttributes redirectAttributes){
 
-        Page<Post> pagingPost = postService.pagePost(postPage - 1, postSize);
-
-        boolean x = checkPageRange(postPage, postSize, redirectAttributes, pagingPost);
-        if (!x) {
+        Page<Post> pagingPost = postService.pagePost(postPage, postSize);
+        if (pagingPost == null){
             return "thread/thread";
         }
 
-        if (user != null){
-            model.addAttribute("loginUsername", user.getUsername());
+        boolean isInRange = checkPageRange(postPage, postSize, redirectAttributes, pagingPost);
+        if (!isInRange) {
+            return "redirect:/thread";
         }
 
         model.addAttribute("pagingPost", pagingPost);
@@ -95,6 +94,33 @@ public class ThreadController {
         return "thread/createPostForm";
     }
 
+    @PostMapping("/create-post")
+    public String createPost(@Valid CreatePostForm createPostForm,
+                             BindingResult bindingResult,
+                             @AuthenticationPrincipal AccountContext accountContext){
+
+        if (accountContext == null){
+            log.info("권한 없음");
+            return "redirect:/thread";
+        }
+        String username = accountContext.getAccountDto().getUsername();
+
+        log.info("{}", bindingResult);
+        if (bindingResult.hasErrors()){
+
+            return "thread/createPostForm";
+        }
+
+        ThreadDto threadDto = new ThreadDto();
+        threadDto.setUsername(username);
+        threadDto.setTitle(createPostForm.getTitle());
+        threadDto.setContent(createPostForm.getContent());
+
+        postService.createPost(threadDto);
+
+        return "redirect:/thread";
+    }
+
     // Update
     @GetMapping("/update-post/{postId}")
     public String updatePostForm(@PathVariable Long postId,
@@ -132,4 +158,11 @@ public class ThreadController {
     }
 
     // Delete
+    @PostMapping("/delete-post")
+    public String deletePost(@RequestParam Long postId){
+        log.info("[postId] {}",postId);
+        postService.deletePost(postId);
+
+        return "redirect:/thread";
+    }
 }

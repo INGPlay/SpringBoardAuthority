@@ -4,14 +4,21 @@ import crud.board.BoardAuthority.domain.dto.AccountDto;
 import crud.board.BoardAuthority.domain.response.AccountInfoResponse;
 import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
+import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -78,6 +85,13 @@ public class AccountService {
         accountRepository.save(account);
     }
 
+    public void updateAccountRole(String username, String roleName){
+        Account account = getAccount(username);
+        account.setRole(roleService.findRole(roleName));
+
+        accountRepository.save(account);
+    }
+
     public boolean isMatchedPassword(String username, String rawPassword){
         Account account = getAccount(username);
 
@@ -92,4 +106,27 @@ public class AccountService {
         Account account = optionalAccount.get();
         return account;
     }
+
+    public Page<AccountInfoResponse> pageAccount(int page, int size){
+
+        try {
+            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "role.roleName"));
+
+            Page<AccountInfoResponse> accountInfoResponses = accountRepository.findAll(pageable)
+                    .map(a ->
+                            new AccountInfoResponse(a.getUsername(), a.getRole().getRoleName(), a.getTimeInform())
+                    );
+
+            return accountInfoResponses;
+
+        } catch (IllegalArgumentException e){
+            return null;
+        }
+    }
+
+    public void deleteAccount(String username){
+        Account account = getAccount(username);
+        accountRepository.delete(account);
+    }
+
 }

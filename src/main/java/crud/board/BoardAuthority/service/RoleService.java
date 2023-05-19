@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +24,12 @@ public class RoleService {
 
     public Role findRole(String roleName){
         return roleRepository.findByRoleName(roleName).orElse(null);
+    }
+
+    public Set<String> getRoleNames(){
+        Set<String> roleNameSet = roleRepository.findAll().stream().map(a -> a.getRoleName())
+                .collect(Collectors.toSet());
+
+        return roleNameSet;
     }
 }
