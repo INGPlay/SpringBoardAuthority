@@ -12,59 +12,53 @@
 
 <div class="container">
 
-    <div class="d-flex flex-row justify-content-end">
+    <div class="row">
 
-        <button type="button" class="btn btn-outline-dark"
-                th:onclick="|location.href='@{/thread/create-post}'|">작성하기
-        </button>
+        <div class="col-4">
 
-    </div>
+            <div class="list-group">
+                <button type="button" class="list-group-item list-group-item-action active" aria-current="true">
+                    Role List
+                </button>
 
-    <table class="table table-hover">
+                <div th:each="roleName : ${roleNames}">
+                    <button type="button" class="list-group-item list-group-item-action"
+                            th:text="${roleName}"
+                            th:onclick="|location.href='@{/admin/role/{roleName}(roleName=${roleName})}'|"
+                    ></button>
+                </div>
 
-        <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">제목</th>
-            <th scope="col">글쓴이</th>
-            <th scope="col">작성일</th>
-        </tr>
-        </thead>
+            </div>
 
-        <tbody>
-        <tr th:each = "post : ${pagingPost}" th:onclick="|location.href='@{/thread/post/{postId}(postId=${post.id})}'|">
-            <th th:text = "${post.id}" scope="row">125</th>
-            <td th:text = "${post.title}">125번째 글입니다</td>
-            <td th:text = "${post.account.username}">admin</td>
-            <td th:text = "${#dates.format(post.timeInform.updatedTime, 'MM/dd HH:mm')}">05/18 10:39</td>
-        </tr>
-        </tbody>
+        </div>
 
-    </table>
+        <div class="col-8">
 
+            <div th:if="${rolePathResponse}">
 
-    <div class="d-flex justify-content-center">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
-                    <a class="page-link" href="#" aria-label="Previous" th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}|}">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+                <dl class="row">
 
-                <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
+                    <form th:action="@{/admin/role}" method="post">
 
-                    <a class="page-link" href="#"
-                       th:href="@{|?postPage=${page}|}" th:text="${page}">1</a>
-                </li>
+                        <dt class="col-sm-3">권한명</dt>
+                        <dd class="col-sm-9" th:text="${rolePathResponse.roleName}">User</dd>
+                        <input type="hidden" name="roleName" th:value="${rolePathResponse.roleName}">
 
-                <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
-                    <a class="page-link" href="#" aria-label="Next" th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}|}">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                        <dt class="col-sm-3">허용된 경로</dt>
+                        <dd class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Path" name="formattedRoute"
+                                   th:value="${#strings.listJoin(rolePathResponse.routes,', ')}">
+                        </dd>
+
+                        <button type="submit" class="btn btn-outline-secondary">수정하기</button>
+
+                    </form>
+
+                </dl>
+
+            </div>
+
+        </div>
     </div>
 
 </div>

@@ -54,14 +54,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(a -> a
-//                        .antMatchers("/login").permitAll()
-                        .antMatchers("/test/user", "/account").hasRole("USER")
+                        // 기본 페이지
+                        .antMatchers("/", "/thread", "/login", "/register").permitAll()
+                        
+                        // 테스트
+                        .antMatchers("/test/user").hasRole("USER")
                         .antMatchers("/test/manager").hasRole("MANAGER")
-                        .antMatchers("/test/admin", "/admin/**").hasRole("ADMIN")
-//                        .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
-                                .antMatchers("/", "/thread", "/login").permitAll()
-//                                .anyRequest().access("@authorizationDynamicHandler.isAuthorization(request, authentication)")
-                                .anyRequest().permitAll()
+                        .antMatchers("/test/admin").hasRole("ADMIN")
+
+                        // 동적 권한
+                        .anyRequest().access("@authorizationDynamicHandler.isAuthorization(request, authentication)")
                 )
                 .formLogin(f -> f
                         .loginPage("/login")

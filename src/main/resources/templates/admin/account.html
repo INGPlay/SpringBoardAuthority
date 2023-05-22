@@ -27,34 +27,40 @@
         <tbody>
         <tr th:each = "account : ${accountInfoResponses}">
 
-            <td th:text = "${account.username}">유저이름</td>
+            <div th:if="${account.roleName} != 'ROLE_ADMIN'">
+
+                <td th:text = "${account.username}">유저이름</td>
 
 
-            <form th:action="@{/admin/update-account}" method="post">
+                <form th:action="@{/admin/update-account}" method="post">
 
-                <td>
-                    <input type="hidden" name="username" th:value="${account.username}">
-                    <select name="roleName" class="form-select">
-                        <option th:each = "roleName : ${roleNames}" th:selected="${roleName} == ${account.roleName}"
-                                th:value = "${roleName}" th:text="${roleName}" value="1">One</option>
-                    </select>
-                </td>
+                    <td>
+                            <input type="hidden" name="username" th:value="${account.username}">
+                            <select name="roleName" class="form-select">
+                                <option th:each = "roleName : ${roleNames}" th:selected="${roleName} == ${account.roleName}"
+                                        th:value = "${roleName}" th:text="${roleName}" value="1">One</option>
+                            </select>
+                    </td>
 
 
-                <td>
-                    <button type="submit" class="btn btn-outline-info mb-3">수정하기</button>
-                </td>
+                    <td>
+                        <button type="submit" class="btn btn-outline-info mb-3">수정하기</button>
+                    </td>
 
-            </form>
-
-            <td th:text = "${#dates.format(account.timeInform.createdTime, 'MM/dd HH:mm')}">05/18 10:39</td>
-
-            <td>
-                <form th:action="@{/admin/delete-account}" method="post">
-                    <input type="hidden" name="username" th:value="${account.username}">
-                    <button type="submit" class="btn btn-outline-danger mb-3">삭제하기</button>
                 </form>
-            </td>
+
+
+
+                <td th:text = "${#dates.format(account.timeInform.createdTime, 'MM/dd HH:mm')}">05/18 10:39</td>
+
+                <td>
+                    <form th:action="@{/admin/delete-account}" method="post">
+                        <input type="hidden" name="username" th:value="${account.username}">
+                        <button type="submit" class="btn btn-outline-danger mb-3">삭제하기</button>
+                    </form>
+                </td>
+
+            </div>
 
         </tr>
         </tbody>

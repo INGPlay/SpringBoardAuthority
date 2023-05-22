@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final GrantedAuthority ROLE_MANAGER = new SimpleGrantedAuthority("ROLE_MANAGER");
     private final GrantedAuthority ROLE_ADMIN = new SimpleGrantedAuthority("ROLE_ADMIN");
 
+
+
     @Override
     @Transactional
-    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() ->
@@ -39,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new AccountContext(new AccountDto(account.getUsername(), account.getPassword()), roles);
     }
 
-    private List<GrantedAuthority> handleRole(String roleName){
+    public List<GrantedAuthority> handleRole(String roleName){
         List<GrantedAuthority> roles = new ArrayList<>();
 
         String[] tokens = roleName.split("_");
@@ -59,4 +62,5 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return roles;
     }
+
 }

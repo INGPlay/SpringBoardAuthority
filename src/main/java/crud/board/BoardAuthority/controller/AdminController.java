@@ -1,20 +1,24 @@
 package crud.board.BoardAuthority.controller;
 
 import crud.board.BoardAuthority.domain.dto.admin.UpdateAccountRoleDto;
+import crud.board.BoardAuthority.domain.form.RolePathForm;
 import crud.board.BoardAuthority.domain.response.AccountInfoResponse;
+import crud.board.BoardAuthority.domain.response.RolePathResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
 import crud.board.BoardAuthority.service.AccountService;
+import crud.board.BoardAuthority.service.PathService;
 import crud.board.BoardAuthority.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -47,7 +51,7 @@ public class AdminController {
 
         model.addAttribute("pagingRange", pagingRange);
 
-        model.addAttribute("roleNames", roleService.getRoleNames());
+        model.addAttribute("roleNames", roleService.getRoleNamesNotInAdmin());
 
         return "admin/account";
     }
@@ -92,8 +96,31 @@ public class AdminController {
 
     // Role
     @GetMapping("/role")
-    public String role(){
+    public String role(Model model){
+
+        model.addAttribute("roleNames", roleService.getRoleNamesNotInAdmin());
+        return "admin/role";
+    }
+
+    @GetMapping("/role/{roleName}")
+    public String viewRole(@PathVariable(name = "roleName") String roleName,
+                           Model model){
+
+        RolePathResponse rolePathResponse = roleService.getRolePathResponse(roleName);
+
+        model.addAttribute("roleNames", roleService.getRoleNamesNotInAdmin());
+        model.addAttribute("rolePathResponse", rolePathResponse);
 
         return "admin/role";
+    }
+
+    @PostMapping("/role")
+    public String updateRole(@RequestParam(name = "roleName") String roleName,
+                             @RequestParam(name = "formattedRoute") String formattedRoute){
+        roleService.setPaths(roleName,
+                List.of(formattedRoute.split(","))
+        );
+
+        return "redirect:/admin/role/" + roleName;
     }
 }
