@@ -21,10 +21,6 @@ public class CommentPlus {
     @Column
     private Long commentGroup;
 
-    // 그룹 내 위에서 아래로의 순서
-    @Column
-    private Long commentOrder;
-
     // 그룹 내 왼쪽에서 오른쪽으로의 순서
     @Column
     private Long commentDepth;
@@ -34,9 +30,4 @@ public class CommentPlus {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment comment;
-
-    public void setComment(Comment comment) {
-        this.comment = comment;
-        comment.setCommentPlus(this);
-    }
 }

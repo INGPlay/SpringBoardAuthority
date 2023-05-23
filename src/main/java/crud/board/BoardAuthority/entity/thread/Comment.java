@@ -25,7 +25,7 @@ public class Comment {
     @Column
     private TimeInform timeInform;
 
-    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private CommentPlus commentPlus;
 
     // Post

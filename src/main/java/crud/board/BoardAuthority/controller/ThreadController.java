@@ -3,11 +3,14 @@ package crud.board.BoardAuthority.controller;
 import crud.board.BoardAuthority.domain.dto.PostDto;
 import crud.board.BoardAuthority.domain.dto.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
+import crud.board.BoardAuthority.domain.dto.comment.CommentDto;
 import crud.board.BoardAuthority.domain.form.post.CreatePostForm;
 import crud.board.BoardAuthority.domain.form.post.UpdatePostForm;
+import crud.board.BoardAuthority.domain.response.comment.CommentResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
 import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.security.authenticationManager.AccountContext;
+import crud.board.BoardAuthority.service.CommentService;
 import crud.board.BoardAuthority.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ import javax.validation.Valid;
 @RequestMapping("/thread")
 public class ThreadController {
     private final PostService postService;
+    private final CommentService commentService;
 
     // 게시판 페이징
     @GetMapping
@@ -75,10 +81,14 @@ public class ThreadController {
     @GetMapping("/post/{postId}")
     public String viewPost(@PathVariable Long postId,
                            Model model){
-
+        // 게시글
         PostDto post = postService.findPostById(postId);
-
         model.addAttribute("post", post);
+
+        // 댓글
+        List<CommentResponse> commentResponses = commentService.getCommentsByPostId(postId);
+        model.addAttribute("commentResponses", commentResponses);
+        log.info("{}", commentResponses.stream().map(c -> c.getContent()).collect(Collectors.toList()));
 
         return "thread/post";
     }
@@ -164,5 +174,34 @@ public class ThreadController {
         postService.deletePost(postId);
 
         return "redirect:/thread";
+    }
+
+
+    // Comment 생성
+    @PostMapping("/create-comment/{postId}")
+    public String createComment(@PathVariable Long postId,
+                                @RequestParam String content,
+                                @AuthenticationPrincipal AccountContext accountContext){
+
+        CommentDto commentDto = new CommentDto(
+                postId, accountContext.getAccountDto().getUsername(), content
+        );
+        commentService.createNewComment(commentDto);
+
+        return "redirect:/thread/post/" + postId;
+    }
+
+    @PostMapping("/create-comment/{postId}/{commentGroup}")
+    public String createCommentToComment(@PathVariable(name = "postId") Long postId,
+                                         @PathVariable(name = "commentGroup") Long commentGroup,
+                                         @RequestParam String content,
+                                         @AuthenticationPrincipal AccountContext accountContext){
+
+        CommentDto commentDto = new CommentDto(
+                postId, accountContext.getAccountDto().getUsername(), content
+        );
+        commentService.createNewCommentToComment(commentDto, commentGroup);
+
+        return "redirect:/thread/post/" + commentDto.getPostId();
     }
 }
