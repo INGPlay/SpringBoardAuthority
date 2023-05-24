@@ -12,7 +12,7 @@
 
     <h3>게시물 수정</h3>
 
-    <form th:action="@{/thread/update-post}" th:object="${updatePostForm}" method="post">
+    <form th:action="@{/thread/post/update-post}" th:object="${updatePostForm}" method="post">
 
         <input type="hidden" name="postId" th:value="*{postId}">
 

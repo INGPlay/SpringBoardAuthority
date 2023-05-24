@@ -85,6 +85,9 @@ public class SecurityConfiguration {
                                 .maxSessionsPreventsLogin(false)
 //                        .expiredUrl("expired")
                 )
+                .exceptionHandling(e ->
+                        e.accessDeniedPage("/")
+                );
         ;
 
                 return http.build();

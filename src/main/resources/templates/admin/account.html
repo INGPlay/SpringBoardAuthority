@@ -32,7 +32,7 @@
                 <td th:text = "${account.username}">유저이름</td>
 
 
-                <form th:action="@{/admin/update-account}" method="post">
+                <form th:action="@{/admin/account/update-account}" method="post">
 
                     <td>
                             <input type="hidden" name="username" th:value="${account.username}">
@@ -54,7 +54,7 @@
                 <td th:text = "${#dates.format(account.timeInform.createdTime, 'MM/dd HH:mm')}">05/18 10:39</td>
 
                 <td>
-                    <form th:action="@{/admin/delete-account}" method="post">
+                    <form th:action="@{/admin/account/delete-account}" method="post">
                         <input type="hidden" name="username" th:value="${account.username}">
                         <button type="submit" class="btn btn-outline-danger mb-3">삭제하기</button>
                     </form>

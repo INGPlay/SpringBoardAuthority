@@ -37,7 +37,7 @@ public class Post {
 
     // Comment
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public void setAccount(Account account) {

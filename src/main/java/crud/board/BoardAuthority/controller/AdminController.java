@@ -74,7 +74,7 @@ public class AdminController {
         return true;
     }
 
-    @PostMapping("/update-account")
+    @PostMapping("/account/update-account")
     public String updateAccount(@RequestParam(name = "username") String username,
                                 @RequestParam(name = "roleName") String roleName){
 
@@ -87,7 +87,7 @@ public class AdminController {
         return "redirect:/admin/account";
     }
 
-    @PostMapping("/delete-account")
+    @PostMapping("/account/delete-account")
     public String deleteAccount(@RequestParam(name = "username") String username){
 
         accountService.deleteAccount(username);
