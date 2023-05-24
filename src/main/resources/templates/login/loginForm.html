@@ -18,10 +18,11 @@
         th:if="${param.isCreated}">
         가입에 성공하였습니다.
     </h4>
-<!--    <div class="row justify-content-center text-danger"-->
-<!--        th:unless="${param.isCreated}" >-->
-<!--        가입되지 않은 계정이거나 비밀번호가 틀렸습니다.-->
-<!--    </div>-->
+
+    <div class="row justify-content-center text-danger"
+        th:if="${param.fail}" >
+        가입되지 않은 계정이거나 비밀번호가 틀렸습니다.
+    </div>
 
 <!--    <div class="row justify-content-center text-warning"-->
 <!--         th:if="${param.logout}" >-->

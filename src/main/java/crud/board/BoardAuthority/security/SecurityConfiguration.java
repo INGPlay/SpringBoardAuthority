@@ -68,7 +68,7 @@ public class SecurityConfiguration {
                 .formLogin(f -> f
                         .loginPage("/login")
                         .defaultSuccessUrl("/thread")
-                        .failureUrl("/login")
+                        .failureUrl("/login?fail")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login-process")
@@ -85,9 +85,9 @@ public class SecurityConfiguration {
                                 .maxSessionsPreventsLogin(false)
 //                        .expiredUrl("expired")
                 )
-                .exceptionHandling(e ->
-                        e.accessDeniedPage("/")
-                );
+//                .exceptionHandling(e ->
+//                        e.accessDeniedPage("/")
+//                );
         ;
 
                 return http.build();
