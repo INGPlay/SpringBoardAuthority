@@ -25,7 +25,8 @@ public class Comment {
     @Column
     private TimeInform timeInform;
 
-    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @OneToOne(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Embedded
     private CommentPlus commentPlus;
 
     // Post
@@ -37,11 +38,6 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
-
-    public void setCommentPlus(CommentPlus commentPlus) {
-        this.commentPlus = commentPlus;
-        commentPlus.setComment(this);
-    }
 
     public void setPost(Post post) {
         if (this.post != null){

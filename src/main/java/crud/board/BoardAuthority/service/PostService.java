@@ -1,6 +1,7 @@
 package crud.board.BoardAuthority.service;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
+import crud.board.BoardAuthority.domain.dto.SearchDto;
 import crud.board.BoardAuthority.domain.dto.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.entity.account.Account;
@@ -32,6 +33,17 @@ public class PostService {
 
             return postRepository.findAll(pageable);
         }catch (IllegalArgumentException e){
+            return null;
+        }
+    }
+
+    public Page<Post> searchPost(SearchDto searchDto, int page, int size){
+        try {
+            Pageable pageable = PageRequest.of(page - 1, size);
+
+            return postRepository.search(searchDto, pageable);
+        } catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }

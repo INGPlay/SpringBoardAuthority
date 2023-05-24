@@ -1,6 +1,7 @@
 package crud.board.BoardAuthority.controller.thread;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
+import crud.board.BoardAuthority.domain.dto.SearchDto;
 import crud.board.BoardAuthority.domain.dto.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.domain.dto.comment.CommentDto;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,14 +39,26 @@ public class ThreadController {
     @GetMapping
     public String viewThread(@RequestParam(defaultValue = "1") int postPage,
                              @RequestParam(defaultValue = "10") int postSize,
-                             @RequestParam(required = false) String target,
-                             @RequestParam(required = false) String search,
+                             @RequestParam(required = false) String searchOption,
+                             @RequestParam(required = false) String searchWord,
                              Model model,
                              RedirectAttributes redirectAttributes){
 
-        Page<Post> pagingPost = postService.pagePost(postPage, postSize);
+/*        log.info("[searchWord] {}", searchWord);
+        log.info("[searchOption] {}", searchOption);*/
+        SearchDto searchDto = new SearchDto(searchWord, searchOption);
+        Page<Post> pagingPost = postService.searchPost(
+                searchDto,
+                postPage, postSize
+        );
+
         if (pagingPost == null){
             return "thread/thread";
+        }
+
+        if (StringUtils.hasText(searchOption) && StringUtils.hasText(searchWord)){
+            model.addAttribute("searchOption", searchOption);
+            model.addAttribute("searchWord", searchWord);
         }
 
         boolean isInRange = checkPageRange(postPage, postSize, redirectAttributes, pagingPost);
