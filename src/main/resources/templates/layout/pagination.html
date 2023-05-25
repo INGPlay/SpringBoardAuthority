@@ -8,7 +8,7 @@
       <ul class="pagination">
         <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
           <a class="page-link" href="#" aria-label="Previous"
-             th:href="@{|?postPage=${pagingRange.currentPageNum-pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
+             th:href="@{|?page=${pagingRange.currentPageNum-pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -16,12 +16,12 @@
         <li class="page-item" th:each = "page : ${pagingRange.pageNumList}" th:classappend = "${page} == ${pagingRange.currentPageNum} ? 'active'">
 
           <a class="page-link" href="#"
-             th:href="@{|?postPage=${page}&searchOption=${searchOption}&searchWord=${searchWord}|}" th:text="${page}">1</a>
+             th:href="@{|?page=${page}&searchOption=${searchOption}&searchWord=${searchWord}|}" th:text="${page}">1</a>
         </li>
 
         <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
           <a class="page-link" href="#" aria-label="Next"
-             th:href="@{|?postPage=${pagingRange.currentPageNum + pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
+             th:href="@{|?page=${pagingRange.currentPageNum + pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

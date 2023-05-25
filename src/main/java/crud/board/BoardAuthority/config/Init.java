@@ -35,6 +35,7 @@ public class Init implements InitializingBean{
         initPost();
     }
 
+    @Transactional
     private void initRole(){
 
         final String ROLE_USER = "ROLE_USER";
@@ -47,6 +48,7 @@ public class Init implements InitializingBean{
 
 
         roleService.addPath(ROLE_USER, "/thread/post/**");
+        roleService.addPath(ROLE_USER, "/account");
 
         roleService.addPath(ROLE_MANAGER, "/admin/account/**");
     }
@@ -55,6 +57,10 @@ public class Init implements InitializingBean{
         accountService.createCommonUser(new AccountDto("user", "1111"));
         accountService.createUser(new AccountDto("manager", "1111"), "ROLE_MANAGER");
         accountService.createUser(new AccountDto("admin", "1111"), "ROLE_ADMIN");
+
+        for (int i = 1; i <= 125; i++){
+            accountService.createCommonUser(new AccountDto("user"+ i, "1111"));
+        }
     }
 
     private void initPost() {

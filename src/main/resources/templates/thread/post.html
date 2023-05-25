@@ -54,7 +54,8 @@
         </p>
     </div>
 
-    <div class="d-flex flex-row justify-content-end">
+    <!-- 글쓴이만 -->
+    <div class="d-flex flex-row justify-content-end" th:if="${#strings.equals(post.username, #authentication.name) or #lists.contains(#authentication.authorities, 'ROLE_ADMIN')}">
         <button type="button" class="btn btn-outline-dark"
         th:onclick="|location.href='@{/thread/post/update-post/{postId}(postId=${post.postId})}'|">수정하기
         </button>

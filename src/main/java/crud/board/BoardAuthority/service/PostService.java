@@ -27,21 +27,16 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
-    public Page<Post> pagePost(int page, int size) {
-        try {
-            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "timeInform.createdTime"));
-
-            return postRepository.findAll(pageable);
-        }catch (IllegalArgumentException e){
-            return null;
-        }
-    }
 
     public Page<Post> searchPost(SearchDto searchDto, int page, int size){
         try {
             Pageable pageable = PageRequest.of(page - 1, size);
 
             return postRepository.search(searchDto, pageable);
+        } catch (IllegalArgumentException ie){
+            log.info("Page 없음");
+            return null;
+            
         } catch (Exception e){
             e.printStackTrace();
             return null;

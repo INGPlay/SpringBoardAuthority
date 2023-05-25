@@ -33,6 +33,7 @@ public class CommentController {
         return "redirect:/thread/post/" + postId;
     }
 
+    // 대댓글
     @PostMapping("/create-comment/{postId}/{commentGroup}")
     public String createCommentToComment(@PathVariable(name = "postId") Long postId,
                                          @PathVariable(name = "commentGroup") Long commentGroup,

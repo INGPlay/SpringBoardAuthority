@@ -63,15 +63,15 @@ public class RoleService {
         return roleRepository.findByRoleName(roleName).orElse(null);
     }
 
-    public Set<String> getRoleNames(){
-        Set<String> roleNameSet = roleRepository.findAll().stream().map(a -> a.getRoleName())
-                .collect(Collectors.toSet());
+    public List<String> getRoleNames(){
+
+        List<String> roleNameSet = roleRepository.getRoleNames();
 
         return roleNameSet;
     }
 
-    public Set<String> getRoleNamesNotInAdmin(){
-        Set<String> roleNames = getRoleNames();
+    public List<String> getRoleNamesNotInAdmin(){
+        List<String> roleNames = getRoleNames();
         roleNames.remove("ROLE_ADMIN");
 
         return roleNames;

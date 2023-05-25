@@ -86,9 +86,15 @@ public class PostController {
     // Update
     @GetMapping("/update-post/{postId}")
     public String updatePostForm(@PathVariable Long postId,
-                                 Model model){
+                                 Model model,
+                                 @AuthenticationPrincipal AccountContext context){
 
         PostDto post = postService.findPostById(postId);
+
+        // 포스트의 작성자와 로그인 사용자가 같지 않을 경우 에러
+        if (!post.getUsername().equals(context.getUsername())){
+            throw new RuntimeException();
+        }
 
         UpdatePostForm updatePostForm = new UpdatePostForm(post.getPostId(), post.getTitle(), post.getContent());
 
@@ -121,8 +127,16 @@ public class PostController {
 
     // Delete
     @PostMapping("/delete-post")
-    public String deletePost(@RequestParam Long postId){
+    public String deletePost(@RequestParam Long postId,
+                             @AuthenticationPrincipal AccountContext context){
         log.info("[postId] {}",postId);
+
+        PostDto post = postService.findPostById(postId);
+        // 포스트의 작성자와 로그인 사용자가 같지 않을 경우 에러
+        if (!post.getUsername().equals(context.getUsername())){
+            throw new RuntimeException();
+        }
+
         postService.deletePost(postId);
 
         return "redirect:/thread";

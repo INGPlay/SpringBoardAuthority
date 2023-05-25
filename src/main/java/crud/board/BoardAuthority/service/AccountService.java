@@ -1,10 +1,10 @@
 package crud.board.BoardAuthority.service;
 
 import crud.board.BoardAuthority.domain.dto.AccountDto;
+import crud.board.BoardAuthority.domain.dto.SearchDto;
 import crud.board.BoardAuthority.domain.response.AccountInfoResponse;
 import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
-import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,19 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -113,22 +105,17 @@ public class AccountService {
         return account;
     }
 
-    public Page<AccountInfoResponse> pageAccount(int page, int size){
-
+    public Page<AccountInfoResponse> search(SearchDto searchDto, int page, int size){
         try {
-            Pageable pageable = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "role.roleName"));
+            Pageable pageable = PageRequest.of(page - 1, size);
 
-            Page<AccountInfoResponse> accountInfoResponses = accountRepository.findAll(pageable)
-                    .map(a ->
-                            new AccountInfoResponse(a.getUsername(), a.getRole().getRoleName(), a.getTimeInform())
-                    );
-
-            return accountInfoResponses;
-
-        } catch (IllegalArgumentException e){
+            return accountRepository.search(searchDto, pageable);
+        } catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
+
 
     public void deleteAccount(String username){
         Account account = getAccount(username);

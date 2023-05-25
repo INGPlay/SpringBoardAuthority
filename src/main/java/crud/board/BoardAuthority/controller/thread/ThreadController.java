@@ -37,8 +37,8 @@ public class ThreadController {
 
     // 게시판 페이징
     @GetMapping
-    public String viewThread(@RequestParam(defaultValue = "1") int postPage,
-                             @RequestParam(defaultValue = "10") int postSize,
+    public String viewThread(@RequestParam(defaultValue = "1") int page,
+                             @RequestParam(defaultValue = "10") int size,
                              @RequestParam(required = false) String searchOption,
                              @RequestParam(required = false) String searchWord,
                              Model model,
@@ -49,21 +49,23 @@ public class ThreadController {
         SearchDto searchDto = new SearchDto(searchWord, searchOption);
         Page<Post> pagingPost = postService.searchPost(
                 searchDto,
-                postPage, postSize
+                page, size
         );
 
         if (pagingPost == null){
             return "thread/thread";
         }
 
+        boolean isInRange = checkPageRange(page, size, redirectAttributes, pagingPost);
+        if (!isInRange) {
+            redirectAttributes.addAttribute("searchOption", searchOption);
+            redirectAttributes.addAttribute("searchWord", searchWord);
+            return "redirect:/thread";
+        }
+
         if (StringUtils.hasText(searchOption) && StringUtils.hasText(searchWord)){
             model.addAttribute("searchOption", searchOption);
             model.addAttribute("searchWord", searchWord);
-        }
-
-        boolean isInRange = checkPageRange(postPage, postSize, redirectAttributes, pagingPost);
-        if (!isInRange) {
-            return "redirect:/thread";
         }
 
         model.addAttribute("pagingPost", pagingPost);
@@ -78,14 +80,14 @@ public class ThreadController {
     private boolean checkPageRange(int postPage, int postSize, RedirectAttributes redirectAttributes, Page<Post> pagingPost) {
         // 페이지가 1보다 작은 경우
         if (postPage < 1){
-            redirectAttributes.addAttribute("postPage", 1);
-            redirectAttributes.addAttribute("postSize", postSize);
+            redirectAttributes.addAttribute("page", 1);
+            redirectAttributes.addAttribute("size", postSize);
             return false;
 
             // 페이지가 최대 범위를 넘어선 경우
         } else if (postPage > pagingPost.getTotalPages()){
-            redirectAttributes.addAttribute("postPage", pagingPost.getTotalPages());
-            redirectAttributes.addAttribute("postSize", postSize);
+            redirectAttributes.addAttribute("page", pagingPost.getTotalPages());
+            redirectAttributes.addAttribute("size", postSize);
             return false;
         }
 
