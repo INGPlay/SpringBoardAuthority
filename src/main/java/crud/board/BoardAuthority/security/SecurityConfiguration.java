@@ -78,6 +78,12 @@ public class SecurityConfiguration {
                         .logoutSuccessUrl("/")
                         .deleteCookies("JSESSIONID", "remember-me")
                 )
+                .rememberMe(r -> r
+                        .rememberMeParameter("remember-me")         // 기본 파라미터명은 remember-me
+                        .tokenValiditySeconds(3600)              // Default 는 14일
+                        .alwaysRemember(true)                    // 리멤버 미 기능이 활성화되지 않아도 항상 실행
+                        .userDetailsService(customUserDetailsService)
+                )
                 .sessionManagement(m -> m
 //                        .sessionFixation().changeSessionId()
 //                        .invalidSessionUrl("/invalid")
