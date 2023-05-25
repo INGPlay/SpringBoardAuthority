@@ -37,8 +37,17 @@
 
 # 구조도
 
-# 
-![plan](images/BoardAuthority.png)
+# 서비스 구조
+추가 예정
+
+# 와이어프레임
+![wireframe](images/Wireframe.png)
+
+# 계층 구조
+![Hierarchy](images/Hierarchy.png)
+
+# 엔티티 구조
+![entity](images/Entity.png)
 
 <br>
 
@@ -60,3 +69,4 @@
 
 # 느낀 점
 - JpaRepository의 findAll() 로 뽑아와서 map() 해서 값들 뽑아오지 말기... 이거 때문에 쿼리가 비효율적으로 출력되는 것 같다.
+  - QueryDsl로 대체하여 구현
