@@ -12,7 +12,7 @@
 
 <div class="container">
 
-    <div class="d-flex flex-row justify-content-end">
+    <div class="d-flex flex-row justify-content-end" sec:authorize="isAuthenticated()">
 
         <button type="button" class="btn btn-outline-dark"
                 th:onclick="|location.href='@{/thread/post/create-post}'|">작성하기
