@@ -67,7 +67,7 @@
 
 <br>
 
-- 로그인된 경우
+- 로그인된 경우  
 ![login2](images/pages/login2.png)
 
   - 로그인한 상태의 경우 위와 같이 바뀌며, 사용자의 정보와 비밀번호를 바꿀 수 있는 페이지로 이동할 수 있는 버튼과 로그아웃 버튼이 있음
@@ -76,8 +76,7 @@
 
 ### 2. 권한에 따른 메뉴
 
-- 로그인 하지 않았거나 권한이 ROLE_USER 인 경우
-
+- 로그인 하지 않았거나 권한이 ROLE_USER 인 경우  
 ![usermenu](images/pages/usermenu.png)
 
     - 메인 페이지로 돌아가는 메뉴만 존재함
@@ -182,8 +181,12 @@
 ### 2. URL 관리자 페이지 
 - 기본  
 ![adminrole](images/pages/role.png)
-  - 권한의 허용범위를 동적으로 관리함
+  - 각 권한에게 허용된 URL을 관리함
 
+
+- 검증  
+![rolevalidation](images/pages/rolevalidation.png)
+  - 잘못된 입력값을 제출할 경우 다음과 같이 표시함
 
 # 기능
 
