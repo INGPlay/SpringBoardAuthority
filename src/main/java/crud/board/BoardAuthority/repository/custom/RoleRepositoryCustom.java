@@ -5,4 +5,6 @@ import java.util.Set;
 
 public interface RoleRepositoryCustom {
     public List<String> getRoleNames();
+
+    public List<String> getRoutes(String roleName);
 }

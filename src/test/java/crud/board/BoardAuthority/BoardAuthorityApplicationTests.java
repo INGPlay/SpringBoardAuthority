@@ -3,6 +3,7 @@ package crud.board.BoardAuthority;
 import crud.board.BoardAuthority.entity.thread.Post;
 import crud.board.BoardAuthority.repository.CommentRepository;
 import crud.board.BoardAuthority.service.PostService;
+import crud.board.BoardAuthority.service.RoleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +22,12 @@ class BoardAuthorityApplicationTests {
 	@Autowired
 	private CommentRepository commentRepository;
 
+	@Autowired
+	private RoleService roleService;
+
 	@Test
 	void contextLoads() {
-		commentRepository.getCommentsByPostId(1L);
-		commentRepository.getLastGroupIndex(1L);
+		roleService.getRoutes("ROLE_USER");
 	}
 
 }

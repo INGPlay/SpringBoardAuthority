@@ -14,4 +14,6 @@ public interface RoleRepository extends JpaRepository<Role, Long>, RoleRepositor
     public Optional<Role> findByRoleName(String roleName);
 
     public List<String> getRoleNames();
+
+    public List<String> getRoutes(String roleName);
 }

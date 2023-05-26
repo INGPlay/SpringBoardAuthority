@@ -77,23 +77,8 @@ public class RoleService {
         return roleNames;
     }
 
-    public List<RolePathResponse> getRolePathResponses(Set<String> roleNames){
-        List<RolePathResponse> rolePathResponses = roleNames.stream()
-                .map(r ->
-                        getRolePathResponse(r)
-                ).collect(Collectors.toList());
-
-        return rolePathResponses;
-    }
-    public RolePathResponse getRolePathResponse(String roleName){
-        RolePathResponse rolePathResponse = new RolePathResponse(roleName, getRoutes(roleName));
-
-        return rolePathResponse;
-    }
-
-    public Set<String> getRoutes(String roleName){
-        Role role = findRole(roleName);
-        Set<String> routes = role.getPaths().stream().map(p -> p.getRoute()).collect(Collectors.toSet());
+    public List<String> getRoutes(String roleName){
+        List<String> routes = roleRepository.getRoutes(roleName);
 
         return routes;
     }

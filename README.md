@@ -57,6 +57,8 @@
   - 각 권한이 접근 가능한 경로 설정
   - 각 계정의 권한 설정
 
+- 페이징 처리
+
 - JpaRepository와 QueryDsl 연결
 
 - QueryDsl을 활용한 동적 쿼리

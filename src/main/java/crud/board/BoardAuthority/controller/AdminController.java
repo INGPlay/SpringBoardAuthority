@@ -2,6 +2,7 @@ package crud.board.BoardAuthority.controller;
 
 import crud.board.BoardAuthority.domain.dto.SearchDto;
 import crud.board.BoardAuthority.domain.dto.admin.UpdateAccountRoleDto;
+import crud.board.BoardAuthority.domain.form.RolePathForm;
 import crud.board.BoardAuthority.domain.response.AccountInfoResponse;
 import crud.board.BoardAuthority.domain.response.RolePathResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
@@ -13,9 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -117,21 +120,38 @@ public class AdminController {
     public String viewRole(@PathVariable(name = "roleName") String roleName,
                            Model model){
 
-        RolePathResponse rolePathResponse = roleService.getRolePathResponse(roleName);
+        log.info("{}", String.join(", ", roleService.getRoutes(roleName)));
 
+        RolePathForm rolePathForm = new RolePathForm(
+                roleName, String.join(", ", roleService.getRoutes(roleName))
+        );
+
+        model.addAttribute("rolePathForm", rolePathForm);
         model.addAttribute("roleNames", roleService.getRoleNamesNotInAdmin());
-        model.addAttribute("rolePathResponse", rolePathResponse);
 
         return "admin/role";
     }
 
     @PostMapping("/role")
-    public String updateRole(@RequestParam(name = "roleName") String roleName,
-                             @RequestParam(name = "formattedRoute") String formattedRoute){
+    public String updateRole(@Valid @ModelAttribute RolePathForm rolePathForm,
+                             BindingResult bindingResult,
+                             Model model,
+                             RedirectAttributes redirectAttributes){
+
+        String roleName = rolePathForm.getRoleName();
+        String formattedRoutes = rolePathForm.getFormattedRoutes();
+
+        log.info("{}", bindingResult);
+        if (bindingResult.hasErrors()){
+            model.addAttribute("roleNames", roleService.getRoleNamesNotInAdmin());
+            return "admin/role";
+        }
+
         roleService.setPaths(roleName,
-                List.of(formattedRoute.split(","))
+                List.of(formattedRoutes.split(","))
         );
 
+        redirectAttributes.addAttribute("Success", true);
         return "redirect:/admin/role/" + roleName;
     }
 }

@@ -52,8 +52,8 @@ public class AuthorizationDynamicHandler {
             if (auth.equals("ROLE_ADMIN")){
                 return true;
             }
-            
-            Set<String> routes = roleService.getRoutes(auth);
+
+            List<String> routes = roleService.getRoutes(auth);
 
             for (String pattern : routes){
                 if (antPathMatcher().match(pattern, requestRoute)){

@@ -23,9 +23,6 @@ public class RegisterForm {
      */
     @NotNull
     @Size(min = 4, max = 10)
-    @NotNull
-    @Size(min = 4, max = 10)
-    @Pattern(regexp = "^([a-z0-9]*)$")
     @Pattern(regexp = "^([a-z0-9]*)$")
     private String username;
 

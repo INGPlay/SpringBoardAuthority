@@ -34,21 +34,27 @@
 
         <div class="col-8">
 
-            <div th:if="${rolePathResponse}">
+            <div th:if="${rolePathForm}">
 
                 <dl class="row">
 
-                    <form th:action="@{/admin/role}" method="post">
+                    <form th:action="@{/admin/role}" th:object="${rolePathForm}" method="post">
 
                         <dt class="col-sm-3">권한명</dt>
-                        <dd class="col-sm-9" th:text="${rolePathResponse.roleName}">User</dd>
-                        <input type="hidden" name="roleName" th:value="${rolePathResponse.roleName}">
+                        <dd class="col-sm-9" th:text="*{roleName}">User</dd>
+                        <input type="hidden" name="roleName" th:field="*{roleName}">
+
+                        <h4 class="text-success"
+                            th:if="${param.Success}">
+                            경로가 성공적으로 변경되었습니다.
+                        </h4>
 
                         <dt class="col-sm-3">허용된 경로</dt>
                         <dd class="col-sm-9">
-                            <input type="text" class="form-control" placeholder="Path" name="formattedRoute"
-                                   th:value="${#strings.listJoin(rolePathResponse.routes,', ')}">
+                            <input type="text" class="form-control" placeholder="Path" name="formattedRoutes"
+                                   th:field="*{formattedRoutes}" th:errorclass="border-danger">
                         </dd>
+                        <div class="form-text mb-3" th:errors="*{formattedRoutes}"></div>
 
                         <button type="submit" class="btn btn-outline-secondary">수정하기</button>
 
