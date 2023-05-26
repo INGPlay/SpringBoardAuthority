@@ -188,15 +188,15 @@
 ![rolevalidation](images/pages/rolevalidation.png)
   - 잘못된 입력값을 제출할 경우 다음과 같이 표시함
 
-# 기능
+># 기능
 
-- anyRequest().access() 흘 활용한 동적 권한 설정
+- anyRequest().access() 를 활용한 동적 권한 설정
   - 각 권한이 접근 가능한 경로 설정
   - 각 계정의 권한 설정
 
 - 페이징 처리
 
-- QueryDsl을 활용한 동적 쿼리
+- QueryDsl로 만든 동적쿼리를 활용한 검색
 
 - 댓글과 대댓글 기능
 
@@ -204,6 +204,6 @@
 
 <br>
 
-# 느낀 점
+># 느낀 점
 - JpaRepository의 findAll() 로 뽑아와서 map() 해서 값들 뽑아오지 말기... 이거 때문에 쿼리가 비효율적으로 출력되는 것 같다.
   - QueryDsl로 대체하여 구현
