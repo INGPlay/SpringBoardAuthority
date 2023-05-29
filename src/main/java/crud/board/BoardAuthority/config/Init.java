@@ -46,7 +46,6 @@ public class Init implements InitializingBean{
         roleService.createRole(ROLE_MANAGER);
         roleService.createRole(ROLE_ADMIN);
 
-
         roleService.addPath(ROLE_USER, "/thread/post/**");
         roleService.addPath(ROLE_USER, "/thread/comment/**");
         roleService.addPath(ROLE_USER, "/account");
