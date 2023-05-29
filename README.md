@@ -62,14 +62,12 @@
 
 - *로그인 되지 않은 경우*  
 ![login1](images/pages/login1.png)
-
   - 오른쪽 상단 메뉴에서 로그인 메뉴 또는 가입 페이지로 이동할 수 있음
 
 <br>
 
 - *로그인된 경우*  
 ![login2](images/pages/login2.png)
-
   - 로그인한 상태의 경우 위와 같이 바뀌며, 사용자의 정보와 비밀번호를 바꿀 수 있는 페이지로 이동할 수 있는 버튼과 로그아웃 버튼이 있음
 
 <br>
@@ -78,21 +76,18 @@
 
 - *로그인 하지 않았거나 권한이 ROLE_USER 인 경우*  
 ![usermenu](images/pages/usermenu.png)
-
     - 메인 페이지로 돌아가는 메뉴만 존재함
 
 <br>
 
 - *권한이 ROLE_MANAGER 인 경우*  
 ![managermenu](images/pages/managermenu.png)
-
   - 계정 관리 페이지로 갈 수 있는 메뉴가 추가됨
 
 <br>
 
 - *권한이 ROLE_ADMIN 인 경우*   
 ![adminmenu](images/pages/adminmenu.png)
-
   - 롤 관리 페이지로 갈 수 있는 메뉴가 추가됨
 
 <br>
@@ -101,7 +96,6 @@
 
 - *기본*
 ![thread1](images/pages/thread1.png)
-
   - 게시글을 클릭할 시 로그인 페이지로 이동함
   - 아래 쪽 숫자 버튼을 클릭하여 페이징 함
   - 게시글의 제목, 내용, 글쓴이로 검색할 수 있음
@@ -129,7 +123,6 @@
 
 - *로그인을 한 경우*
 ![thread2](images/pages/thread2.png)
-
   - 오른쪽 상단에 게시글을 작성하는 버튼이 추가됨
 
 ---
@@ -191,7 +184,6 @@
 ### 1. 가입 페이지
 - *기본*  
 ![register](images/pages/register.png)
-
   - 유저 이름과 비밀번호 체크를 통해 계정을 생성할 수 있음
 
 
@@ -203,7 +195,6 @@
 
 - *검증*    
 ![registervalidation](images/pages/registerValidation.png)
-
   - 잘못된 양식의 유저 이름과 비밀번호를 제출할 경우 다음과 같이 표시함
 
 </div>
@@ -213,6 +204,7 @@
 
 
 ### 2. 로그인 페이지
+
 - *기본*  
 ![loginpage](images/pages/loginpage.png)
   - 로그인 페이지를 통해 로그인할 수 있음
@@ -225,7 +217,6 @@
 
 - *로그인 실패*    
 ![loginfail](images/pages/loginfail.png)
-
   - 로그인 실패 시 빨간 폰트로 나타냄
 
 </div>
@@ -248,7 +239,6 @@
 
 - *로그인 실패*    
 ![passwordfil](images/pages/accountinfopasswordfail.png)
-
   - 조건에 맞지 않는 패스워드가 입력될 경우 틀린 내용을 반환함.
 
 </div>
@@ -269,14 +259,12 @@
 
 - *사용자 권한 수정*    
 ![roleupdate](images/pages/accountroleupdate.png)
-
   - 드롭다운 리스트에서 하나를 고르고 수정하기 버튼을 누르면 사용자의 권한이 수정된다.
 
 <br>
 
 - *사용자 삭제*    
 ![accountdelete](images/pages/accountdelete.png)
-
   - 삭제하고자 하는 사용자의 삭제하기 버튼을 누르면 팝업창이 나타난다.
   - 팝업창의 삭제하기 버튼을 누르면 삭제된다.
 
