@@ -59,12 +59,14 @@
                 <td th:text = "${#dates.format(account.timeInform.createdTime, 'MM/dd HH:mm')}">05/18 10:39</td>
 
                 <td>
-                    <button type="submit" class="btn btn-outline-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteCheck">
+                    <button type="submit" class="btn btn-outline-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteCheck"
+                        th:attr="data-bs-target=|#modal-${account.username}|" >
                         삭제하기
                     </button>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="deleteCheck" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="deleteCheck" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+                        th:id="|modal-${account.username}|">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -78,7 +80,8 @@
 
                                     <form th:action="@{/admin/account/delete-account}" method="post">
                                         <input type="hidden" name="username" th:value="${account.username}">
-                                        <button type="submit" class="btn btn-outline-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteCheck">삭제하기</button>
+                                        <button type="submit" class="btn btn-outline-danger mb-3" data-bs-toggle="modal" data-bs-target="#deleteCheck"
+                                        th:attr="data-bs-target=|#modal-${account.username}|">삭제하기</button>
                                     </form>
 
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>

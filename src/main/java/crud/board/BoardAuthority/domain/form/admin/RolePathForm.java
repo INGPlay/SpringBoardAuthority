@@ -1,4 +1,4 @@
-package crud.board.BoardAuthority.domain.form;
+package crud.board.BoardAuthority.domain.form.admin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

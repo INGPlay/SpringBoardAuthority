@@ -2,6 +2,7 @@ package crud.board.BoardAuthority.service;
 
 import antlr.actions.python.CodeLexer;
 import crud.board.BoardAuthority.domain.response.RolePathResponse;
+import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.authentication.Path;
 import crud.board.BoardAuthority.entity.authentication.Role;
 import crud.board.BoardAuthority.repository.PathRepository;
@@ -27,6 +28,10 @@ public class RoleService {
         Role role = new Role(roleName);
 
         roleRepository.save(role);
+    }
+
+    public void createRoleWithPrefix(String roleName){
+        createRole("ROLE_" + roleName);
     }
 
     public void addPath(String roleName, String route){

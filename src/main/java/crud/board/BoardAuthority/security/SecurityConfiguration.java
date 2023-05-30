@@ -4,6 +4,7 @@ import crud.board.BoardAuthority.security.authenticationManager.CustomUserDetail
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +57,7 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(a -> a
                         // 기본 페이지
-                        .antMatchers("/", "/thread", "/thread/list", "/login", "/register").permitAll()
+                        .antMatchers("/", "/thread", "/thread/list", "/login", "/register", "/error").permitAll()
                         
                         // 테스트
                         .antMatchers("/test/user").hasRole("USER")
