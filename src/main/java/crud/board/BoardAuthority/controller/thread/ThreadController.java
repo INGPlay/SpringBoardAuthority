@@ -1,32 +1,17 @@
 package crud.board.BoardAuthority.controller.thread;
 
-import crud.board.BoardAuthority.domain.dto.PostDto;
 import crud.board.BoardAuthority.domain.dto.SearchDto;
-import crud.board.BoardAuthority.domain.dto.ThreadDto;
-import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
-import crud.board.BoardAuthority.domain.dto.comment.CommentDto;
-import crud.board.BoardAuthority.domain.form.post.CreatePostForm;
-import crud.board.BoardAuthority.domain.form.post.UpdatePostForm;
-import crud.board.BoardAuthority.domain.response.comment.CommentResponse;
 import crud.board.BoardAuthority.domain.response.pagingPost.PagingRange;
 import crud.board.BoardAuthority.entity.thread.Post;
-import crud.board.BoardAuthority.security.authenticationManager.AccountContext;
-import crud.board.BoardAuthority.service.CommentService;
 import crud.board.BoardAuthority.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,16 +41,9 @@ public class ThreadController {
             return "thread/thread";
         }
 
-        boolean isInRange = checkPageRange(page, size, redirectAttributes, pagingPost);
-        if (!isInRange) {
-            redirectAttributes.addAttribute("searchOption", searchOption);
-            redirectAttributes.addAttribute("searchWord", searchWord);
-            return "redirect:/thread";
-        }
-
         if (StringUtils.hasText(searchOption) && StringUtils.hasText(searchWord)){
-            model.addAttribute("searchOption", searchOption);
-            model.addAttribute("searchWord", searchWord);
+            model.addAttribute("searchOption", searchDto.getSearchOption());
+            model.addAttribute("searchWord", searchDto.getSearchWord());
         }
 
         model.addAttribute("pagingPost", pagingPost);

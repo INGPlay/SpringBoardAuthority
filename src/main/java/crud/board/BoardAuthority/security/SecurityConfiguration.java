@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web -> web.ignoring()
-                .antMatchers("/css/*", "/js/*")
+                .antMatchers("/css/*", "/js/*", "/favicon.ico")
                 // 경로 잘 확인할 것. 정적 파일이 다 들어가지 않으면 통과된 정적파일이 URI로 들어가서 반환됨
         );
     }
@@ -55,7 +55,7 @@ public class SecurityConfiguration {
         http
                 .authorizeRequests(a -> a
                         // 기본 페이지
-                        .antMatchers("/", "/thread", "/login", "/register").permitAll()
+                        .antMatchers("/", "/thread", "/thread/list", "/login", "/register").permitAll()
                         
                         // 테스트
                         .antMatchers("/test/user").hasRole("USER")

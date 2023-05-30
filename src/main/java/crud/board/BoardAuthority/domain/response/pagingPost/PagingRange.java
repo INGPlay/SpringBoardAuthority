@@ -24,6 +24,9 @@ public class PagingRange<T> {
     private final boolean isPrevious;
     private final boolean isNext;
 
+    private final int previousNum;
+    private final int nextNum;
+
     public PagingRange(Page<T> page, int displayNum) {
 
         this.page = page;
@@ -39,6 +42,25 @@ public class PagingRange<T> {
 
         this.isPrevious = hasPrevious();
         this.isNext = hasNext();
+
+        this.previousNum = currentPageNum - displayNum;
+        this.nextNum = currentPageNum + displayNum;
+    }
+
+    public int getPreviousNum(){
+        if (this.previousNum < 1){
+            return 1;
+        }
+
+        return this.previousNum;
+    }
+
+    public int getNextNum(){
+        if (this.nextNum >= page.getTotalPages()){
+            return page.getTotalPages();
+        }
+
+        return this.nextNum;
     }
 
     private boolean hasPrevious(){

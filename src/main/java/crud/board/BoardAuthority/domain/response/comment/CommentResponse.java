@@ -8,6 +8,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 public class CommentResponse {
+    private Long postId;
     private String username;
     private String content;
     private Date createdTime;

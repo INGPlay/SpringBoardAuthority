@@ -2,7 +2,7 @@ package crud.board.BoardAuthority.service;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
 import crud.board.BoardAuthority.domain.dto.SearchDto;
-import crud.board.BoardAuthority.domain.dto.ThreadDto;
+import crud.board.BoardAuthority.domain.dto.thread.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

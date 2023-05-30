@@ -7,8 +7,9 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li class="page-item" th:classappend="${pagingRange.isPrevious} ? 'active' : 'disabled'">
+
           <a class="page-link" href="#" aria-label="Previous"
-             th:href="@{|?page=${pagingRange.currentPageNum-pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
+             th:href="@{|?page=${pagingRange.previousNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -21,7 +22,7 @@
 
         <li class="page-item" th:classappend="${pagingRange.isNext} ? 'active' : 'disabled'">
           <a class="page-link" href="#" aria-label="Next"
-             th:href="@{|?page=${pagingRange.currentPageNum + pagingRange.displayNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
+             th:href="@{|?page=${pagingRange.nextNum}&searchOption=${searchOption}&searchWord=${searchWord}|}">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

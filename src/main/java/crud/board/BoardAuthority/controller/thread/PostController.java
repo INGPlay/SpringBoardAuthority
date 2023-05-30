@@ -1,13 +1,11 @@
 package crud.board.BoardAuthority.controller.thread;
 
 import crud.board.BoardAuthority.domain.dto.PostDto;
-import crud.board.BoardAuthority.domain.dto.ThreadDto;
+import crud.board.BoardAuthority.domain.dto.thread.ThreadDto;
 import crud.board.BoardAuthority.domain.dto.UpdatePostDto;
 import crud.board.BoardAuthority.domain.form.post.CreatePostForm;
 import crud.board.BoardAuthority.domain.form.post.UpdatePostForm;
-import crud.board.BoardAuthority.domain.response.comment.CommentResponse;
 import crud.board.BoardAuthority.security.authenticationManager.AccountContext;
-import crud.board.BoardAuthority.service.CommentService;
 import crud.board.BoardAuthority.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +23,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/thread/post")
 public class PostController {
     private final PostService postService;
-    private final CommentService commentService;
 
     // Read
     @GetMapping("/{postId}")
@@ -38,15 +33,15 @@ public class PostController {
         model.addAttribute("post", post);
 
         // 댓글
-        List<CommentResponse> commentResponses = commentService.getCommentsByPostId(postId);
-        model.addAttribute("commentResponses", commentResponses);
-        log.info("{}", commentResponses.stream().map(c -> c.getContent()).collect(Collectors.toList()));
+//        List<CommentResponse> commentResponses = commentService.getCommentsByPostId(postId);
+//        model.addAttribute("commentResponses", commentResponses);
+//        log.info("{}", commentResponses.stream().map(c -> c.getContent()).collect(Collectors.toList()));
 
         return "thread/post";
     }
 
     // Create
-    @GetMapping("/create-post")
+    @GetMapping("/create-post")     // form
     public String createPostForm(Model model){
 
         CreatePostForm createPostForm = new CreatePostForm("", "");

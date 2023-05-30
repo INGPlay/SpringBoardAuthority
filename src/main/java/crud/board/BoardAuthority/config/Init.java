@@ -1,9 +1,7 @@
 package crud.board.BoardAuthority.config;
 
 import crud.board.BoardAuthority.domain.dto.AccountDto;
-import crud.board.BoardAuthority.domain.dto.ThreadDto;
-import crud.board.BoardAuthority.entity.authentication.Path;
-import crud.board.BoardAuthority.entity.authentication.Role;
+import crud.board.BoardAuthority.domain.dto.thread.ThreadDto;
 import crud.board.BoardAuthority.service.AccountService;
 import crud.board.BoardAuthority.service.PostService;
 import crud.board.BoardAuthority.service.RoleService;

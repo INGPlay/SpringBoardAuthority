@@ -1,4 +1,4 @@
-package crud.board.BoardAuthority.controller;
+package crud.board.BoardAuthority.controller.admin;
 
 import crud.board.BoardAuthority.domain.dto.SearchDto;
 import crud.board.BoardAuthority.domain.dto.admin.UpdateAccountRoleDto;

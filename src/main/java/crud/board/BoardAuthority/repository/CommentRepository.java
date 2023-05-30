@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select new crud.board.BoardAuthority.domain.response.comment.CommentResponse" +
             "(" +
-            "c.account.username, c.content, c.timeInform.createdTime, c.timeInform.updatedTime, c.commentPlus.commentGroup, c.commentPlus.commentDepth" +
+            "c.post.id, c.account.username, c.content, c.timeInform.createdTime, c.timeInform.updatedTime, c.commentPlus.commentGroup, c.commentPlus.commentDepth" +
             ")" +
             " from Comment c" +
-            " where c.post.id = :postId " +
+            " where c.post.id = :postId" +
             " order by c.commentPlus.commentGroup asc, c.commentPlus.commentDepth asc, c.timeInform.createdTime asc")
     public List<CommentResponse> getCommentsByPostId(Long postId);
 

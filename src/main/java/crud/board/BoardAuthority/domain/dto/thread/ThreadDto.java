@@ -1,4 +1,4 @@
-package crud.board.BoardAuthority.domain.dto;
+package crud.board.BoardAuthority.domain.dto.thread;
 
 import lombok.Getter;
 import lombok.Setter;
