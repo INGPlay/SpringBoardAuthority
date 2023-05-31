@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -92,6 +94,7 @@ public class SecurityConfiguration {
                                 .maximumSessions(1)
                                 .maxSessionsPreventsLogin(false)
 //                        .expiredUrl("expired")
+                                .sessionRegistry(sessionRegistry())
                 )
 //                .exceptionHandling(e ->
 //                        e.accessDeniedPage("/")
@@ -104,5 +107,10 @@ public class SecurityConfiguration {
     @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry(){
+        return new SessionRegistryImpl();
     }
 }

@@ -31,6 +31,7 @@ public class AuthorizationDynamicHandler {
     private final RoleService roleService;
 
     public boolean isAuthorization(HttpServletRequest request, Authentication authentication){
+
         Object principal = authentication.getPrincipal();
 
         // 권한이 없는 경우

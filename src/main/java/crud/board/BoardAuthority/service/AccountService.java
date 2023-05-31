@@ -6,12 +6,16 @@ import crud.board.BoardAuthority.domain.response.AccountInfoResponse;
 import crud.board.BoardAuthority.entity.account.Account;
 import crud.board.BoardAuthority.entity.general.embeddables.TimeInform;
 import crud.board.BoardAuthority.repository.AccountRepository;
+import crud.board.BoardAuthority.security.authenticationManager.AccountContext;
+import crud.board.BoardAuthority.security.lib.AuthenticationSupport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,7 @@ public class AccountService {
 
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationSupport authenticationSupport;
     
     public boolean createCommonUser(AccountDto accountDto){
         Account account = new Account();
@@ -87,6 +92,8 @@ public class AccountService {
         Account account = getAccount(username);
         account.setRole(roleService.findRole(roleName));
 
+        authenticationSupport.forceLogoutUser(username);
+
         accountRepository.save(account);
     }
 
@@ -110,6 +117,9 @@ public class AccountService {
             Pageable pageable = PageRequest.of(page - 1, size);
 
             return accountRepository.search(searchDto, pageable);
+        } catch (IllegalArgumentException e){
+            log.info("Page index must not be less than zero");
+            return null;
         } catch (Exception e){
             e.printStackTrace();
             return null;

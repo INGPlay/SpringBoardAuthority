@@ -29,6 +29,8 @@
 - HTML
 - Thymleaf
 - BootStrap v5.1
+- JavaScript
+- jQuery
 
 > ## IDE
 - IntelliJ IDEA
@@ -173,6 +175,11 @@
 ![commenttocommentcomplete](images/pages/commenttocommentcomplete.png)
   - 작성된 댓글에 reply 버튼을 클릭하면 대댓글 작성칸이 나온다.
 
+<br>
+
+- *비동기 처리*
+  - Ajax를 활용함으로써 좀 더 빠른 로드를 할 수 있게 함
+
 </div>
 </details>
 
@@ -260,6 +267,7 @@
 - *사용자 권한 수정*    
 ![roleupdate](images/pages/accountroleupdate.png)
   - 드롭다운 리스트에서 하나를 고르고 수정하기 버튼을 누르면 사용자의 권한이 수정된다.
+  - 수정된 계정의 세션은 만료되어, 다시 로그인을 해야한다.
 
 <br>
 
@@ -277,6 +285,7 @@
 - *기본*  
 ![adminrole](images/pages/role.png)
   - 각 권한에게 허용된 URL을 관리함
+  - Ajax를 활용한 비동기 처리를 하여 빠른 로드를 가능하게 함
 
 <details>
 <summary><u>사용자 권한 수정 및 삭제 기능</u></summary>
@@ -306,6 +315,8 @@
 
 - 백엔드 데이터 검증
 
+- Ajax를 활용한 비동기 처리
+
 <br>
 
 ># 만들면서 배운 것
@@ -316,3 +327,6 @@
 
 - JpaRepository의 findAll() 로 뽑아와서 map() 해서 값들 뽑아오지 말기... 이거 때문에 쿼리가 비효율적으로 출력되는 것 같다.
   - QueryDsl로 대체하여 구현
+
+- 수정된 권한이 즉각적으로 반영이 안되는 점이 있었다. 이 문제는 권한이 변경된 사용자의 세션이 갱신되지 않아서 생기는 문제였다. 
+  - sessionRegistry 에서 권한이 변경된 사용자를 찾아서 세션을 만료시켜서 해결하였다.
